@@ -1,0 +1,160 @@
+router.post('/register', (req, res, next) => {
+
+    // I guess I will have to use this, and set this to true or false within findOne
+
+    let doesExist_ = undefined;
+
+    function generateUserToken(user){
+
+        return jwt.encode({sub: user._id, iat: timeStamp}, config.secretKey);
+
+    }
+
+    if (!req.body.email || !req.body.password) {
+        return res.status(442).send({error: 'Make sure that you entered your email and password'});
+    }
+
+    /// this doesn't return a boolean
+
+    User.findOne({email: req.body.email})
+
+        .then((user) => {
+        /// this should be null if it doesn't exist
+            if (user !== null){
+                doesExist_ = true;
+                console.log('in first Then, user is...' + user);
+                console.log('in first Then, doesExist_ is...' + doesExist_);
+            }
+            else {
+                doesExist_ = false;
+                console.log('in first Then, doesExist_ is ' + doesExist_);
+            }
+        })
+        .then(() => {
+
+            console.log('in second Then, doesExist_ is ' + doesExist_);
+
+
+            if (!doesExist_){
+
+                let password = req.body.password;
+
+                let hashedPassword;
+
+                bcrypt.genSalt(10, function(err, salt){
+                    bcrypt.hash(password, salt, function(err, hash){
+                        if (err) throw err;
+                        hashedPassword = hash;
+                        console.log('hashedPassword is now...' + hashedPassword + ' and the hash is...' + hash);
+                    })
+                });
+
+                let hashPromise = () => {
+
+                    return new Promise ((resolve, reject) => {
+
+                        if (hashedPassword !== undefined && hashedPassword !== null){
+                            console.log('Within hashPromise, hashedPassword is...' + hashedPassword);
+                            resolve();
+                        }
+                        else {
+                            console.log('Within hashPromise, hashedPassword is...' + hashedPassword);
+                            reject('hashedPassword is still undefined');
+                        }
+                    });
+                };
+
+
+                hashPromise().then(() => {
+
+                    User.create({
+                        username: req.body.username,
+                        password: hashedPassword,
+                        name: req.body.name,
+                        email: req.body.email,
+                        profilePic: req.body.profilePic,
+                        ///  userId: userid
+                    }).then((user) => {
+
+                        res.json({token: generateUserToken(user)});
+
+                    })
+
+                });
+
+            }
+
+            else {
+
+                return res.status(422).send({error: "Email is already in use"});
+            }
+
+        })
+
+        .catch((err) => {
+            console.log(err);
+        });
+
+    /*
+
+    let checkEmailPromise = (value_) => {
+
+        return new Promise((resolve, reject) => {
+
+            if (typeof(doesExist_) === 'boolean'){
+                resolve(doesExist_)
+            }
+            else{
+                reject('doesExist_ is still not a boolean value')
+            }
+        })
+
+    };
+    */
+
+    /*
+
+
+    checkEmailPromise(doesExist_).then((doesExist_) => {
+
+
+        if (!doesExist_){
+
+            let password = req.body.password;
+
+            bcrypt.genSalt(10, function(err, salt){
+                bcrypt.hash(password, salt, function(err, hash){
+                    if (err) throw err;
+                    password = hash;
+                })
+            }).then(() => {
+
+                User.create({
+                    username: req.body.username,
+                    password: password,
+                    name: req.body.name,
+                    email: req.body.email,
+                    profilePic: req.body.profilePic,
+                    ///  userId: userid
+                }).then((user) => {
+
+                    res.json({token: generateUserToken(user)});
+
+                })
+
+            });
+
+        }
+
+        else {
+
+            return res.status(422).send({error: "Email is already in use"});
+        }
+
+    }).catch((err) => {
+        console.log(err);
+    })
+
+    */
+
+});

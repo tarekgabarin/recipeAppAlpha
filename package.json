@@ -1,0 +1,47 @@
+{
+  "name": "cheap-eat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "Tarek Gabarin",
+  "license": "ISC",
+  "dependencies": {
+    "@uirouter/angularjs": "^1.0.3",
+    "angular": "^1.6.4",
+    "angular-route": "^1.6.4",
+    "bcrypt": "^1.0.2",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.2",
+    "bootstrap": "^3.3.7",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "express-session": "^1.15.3",
+    "font-awesome": "^4.7.0",
+    "jsonwebtoken": "^7.4.1",
+    "lodash": "^4.17.4",
+    "mongodb": "^2.2.28",
+    "mongoose": "^4.10.4",
+    "mongoose-currency": "^0.2.0",
+    "mongoose-timestamp": "^0.6.0",
+    "morgan": "^1.8.2",
+    "node-sass": "^4.5.3",
+    "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^4.0.0",
+    "sass-loader": "^6.0.5",
+    "uuid": "^3.0.1",
+    "validator": "^7.0.0",
+    "webpack": "^2.6.1"
+  },
+  "devDependencies": {
+    "karma": "^1.7.0"
+  }
+}
