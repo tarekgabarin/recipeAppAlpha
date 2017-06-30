@@ -463,6 +463,12 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 recipe.update({$inc: {'totalAddedRatings': reviewScore}});
 
+                /// I'm now getting this stupid error  CastError: Cast to number failed for value "NaN" at path "reviewAverage"
+
+                console.log(typeof(recipe.totalAddedRatings));
+
+                console.log(typeof(recipe.numberOfRatings));
+
                 let newAverage = Number(recipe.totalAddedRatings) / Number(recipe.numberOfRatings);
 
                 recipe.update({$set: {reviewAverage: newAverage}});
