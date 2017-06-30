@@ -465,6 +465,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 /// I'm now getting this stupid error  CastError: Cast to number failed for value "NaN" at path "reviewAverage"
 
+                /*
+
                 console.log(typeof(recipe.totalAddedRatings));
 
                 console.log(typeof(recipe.numberOfRatings));
@@ -472,6 +474,12 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 let newAverage = Number(recipe.totalAddedRatings) / Number(recipe.numberOfRatings);
 
                 recipe.update({$set: {reviewAverage: newAverage}});
+
+                recipe.save();
+
+                */
+
+                recipe.updateReviewAverage();
 
                 recipe.save();
 
@@ -491,9 +499,17 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 recipe.update({$inc: {'totalAddedRatings': -reviewScore}});
 
+                /*
+
                 let newAverage = Number(recipe.totalAddedRatings) / Number(recipe.numberOfRatings);
 
                 recipe.update({$set: {reviewAverage: newAverage}});
+
+                recipe.save();
+
+                */
+
+                recipe.updateReviewAverage();
 
                 recipe.save();
 
@@ -512,9 +528,17 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 recipe.update({$inc: {'totalAddedRatings': reviewScore}});
 
+                /*
+
                 let newAverage = Number(recipe.totalAddedRatings) / Number(recipe.numberOfRatings);
 
                 recipe.update({$set: {reviewAverage: newAverage}});
+
+                recipe.save();
+
+                */
+
+                recipe.updateReviewAverage();
 
                 recipe.save();
             }
@@ -539,7 +563,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                     });
 
-                    users.update({$pull: {cookLater: [recipe._id, recipe.creationDate]}});
+                    user.update({$pull: {cookLater: [recipe._id, recipe.creationDate]}});
 
                //     recipe.reviewedBy.push([user._id, user.creationDate]); there is a better more efficient way
 
