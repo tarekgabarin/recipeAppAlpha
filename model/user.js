@@ -13,6 +13,9 @@ const jwt = require('jsonwebtoken');
 /// const {SHA256} = require('crypto-js');
 const _ = require('lodash');
 /// remember to install crypto-js
+const reviewSchema = require('../model/review').reviewSchema;
+
+/*
 
 
 let reviewSchema = new Schema();
@@ -36,6 +39,7 @@ reviewSchema.add({
 
 
      */
+/*
 
     howEasyToMake: {
         type: Number,
@@ -99,6 +103,8 @@ reviewSchema.add({
 
 
 });
+
+*/
 
 
 let User = new Schema({
@@ -291,4 +297,6 @@ let options = ({missingPasswordError: "Incorrect password, try again"});
 
 User.plugin(passportLocalMongoose, options);
 
-module.exports = mongoose.model('User', User);
+User = mongoose.model('User', User);
+
+module.exports = {User, reviewSchema};

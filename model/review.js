@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const User = require('../model/user');
 require('mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
+const Schema = mongoose.Schema;
 
-let Schema = mongoose.Schema;
+let reviewSchema = new Schema();
 
-let reviewSchema = new Schema({
+reviewSchema.add({
 
 
     rating: {
@@ -16,15 +17,6 @@ let reviewSchema = new Schema({
         defualt: 0
     },
 
-    /* here is how the overall score is calculated:
-
-     let total = (this.howEasyToMake + this.howGoodTaste + wouldMakeAgain) / 3
-
-
-
-
-
-     */
 
     howEasyToMake: {
         type: Number,
@@ -72,15 +64,16 @@ let reviewSchema = new Schema({
     },
 
     chefsCreationDate: {
-      type: Number,
-      required: true
+        type: Number,
+        required: true
     },
 
     chefsId: {
-      type: String,
-      required: true
+        type: String,
+        required: true
     }
+
 
 });
 
-module.exports = reviewSchema;
+module.exports.reviewSchema = mongoose.model('Review', reviewSchema);

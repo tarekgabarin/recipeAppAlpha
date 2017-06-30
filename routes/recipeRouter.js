@@ -9,8 +9,8 @@ const Recipe = require('../model/recipe');
 const mongoose = require('mongoose');
 const mongodb = require('mongodb');
 mongoose.Promise = Promise;
-let {reviewSchema} = require('../model/recipe');
 const User = require('../model/user');
+const reviewSchema = require('../model/review').reviewSchema;
 
 
 
@@ -167,9 +167,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
 
 
-            return Recipe
-
-                .findOne({name: name, category: category})
+            return Recipe.findOne({name: name, category: category})
 
                 .then((recipe) => {
 
