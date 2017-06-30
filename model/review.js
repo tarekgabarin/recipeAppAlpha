@@ -69,8 +69,7 @@ reviewSchema.add({
     },
 
     chefsId: {
-        type: String,
-        required: true
+        type: String
     }
 
 

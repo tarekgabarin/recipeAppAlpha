@@ -588,7 +588,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                             'usersReviews.$.howGoodTaste': req.body.howGoodTaste,
                             'usersReviews.$.howEasyToMake': req.body.howEasyToMake,
                             'usersReviews.$.rating': reviewScore,
-                            'usersReviews.$.comment': req.body.comment
+                            'usersReviews.$.comment': req.body.comment,
+                            'usersReviews.$.chefsId': dataObj.chefsId
                         }
                     });
 
