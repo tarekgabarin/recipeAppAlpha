@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05ce16e8-8225-4a35-bd59-afadb3dab27a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/recipe.js" afterPath="$PROJECT_DIR$/model/recipe.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/review.js" afterPath="$PROJECT_DIR$/model/review.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/user.js" afterPath="$PROJECT_DIR$/model/user.js" />
@@ -84,36 +83,36 @@
       <file leaf-file-name="recipeRouter.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9050">
-              <caret line="457" column="18" lean-forward="false" selection-start-line="457" selection-start-column="16" selection-end-line="457" selection-end-column="53" />
+            <state relative-caret-position="-1406">
+              <caret line="521" column="21" lean-forward="false" selection-start-line="521" selection-start-column="21" selection-end-line="521" selection-end-column="21" />
               <folding>
-                <element signature="e#598#601#0" expanded="false" />
-                <element signature="e#775#973#0" expanded="false" />
-                <element signature="e#1049#1328#0" expanded="false" />
-                <element signature="e#1417#1660#0" expanded="false" />
-                <element signature="e#1758#2932#0" expanded="false" />
-                <element signature="e#20747#21062#0" expanded="false" />
-                <element signature="e#21183#22512#0" expanded="false" />
+                <element signature="e#602#605#0" expanded="false" />
+                <element signature="e#779#977#0" expanded="false" />
+                <element signature="e#1053#1332#0" expanded="false" />
+                <element signature="e#1421#1664#0" expanded="false" />
+                <element signature="e#1762#2936#0" expanded="false" />
+                <element signature="e#21344#21659#0" expanded="false" />
+                <element signature="e#21780#23109#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="user.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="user.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4900">
-              <caret line="196" column="3" lean-forward="false" selection-start-line="196" selection-start-column="3" selection-end-line="196" selection-end-column="3" />
+            <state relative-caret-position="125">
+              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="recipe.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="recipe.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/recipe.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1900">
-              <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+            <state relative-caret-position="369">
+              <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -123,7 +122,7 @@
         <entry file="file://$PROJECT_DIR$/model/review.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1950">
-              <caret line="78" column="69" lean-forward="true" selection-start-line="78" selection-start-column="69" selection-end-line="78" selection-end-column="69" />
+              <caret line="78" column="30" lean-forward="false" selection-start-line="78" selection-start-column="30" selection-end-line="78" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -170,10 +169,10 @@
         <option value="$PROJECT_DIR$/routes/almostPerfectAddReview.js" />
         <option value="$PROJECT_DIR$/routes/userRouter.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/model/review.js" />
         <option value="$PROJECT_DIR$/model/user.js" />
         <option value="$PROJECT_DIR$/routes/recipeRouter.js" />
         <option value="$PROJECT_DIR$/model/recipe.js" />
-        <option value="$PROJECT_DIR$/model/review.js" />
       </list>
     </option>
   </component>
@@ -399,12 +398,12 @@
       <workItem from="1498799758185" duration="390000" />
       <workItem from="1498800208693" duration="364000" />
       <workItem from="1498839840169" duration="3909000" />
-      <workItem from="1498846899049" duration="617000" />
+      <workItem from="1498846899049" duration="2751000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141243000" />
+    <option name="totallyTimeSpent" value="143377000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
@@ -711,6 +710,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="950">
           <caret line="38" column="29" lean-forward="false" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -725,6 +725,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="11500">
           <caret line="460" column="0" lean-forward="false" selection-start-line="460" selection-start-column="0" selection-end-line="460" selection-end-column="0" />
+          <folding>
+            <element signature="e#13726#13768#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -776,42 +779,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/recipe.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1900">
-          <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9050">
-          <caret line="457" column="18" lean-forward="false" selection-start-line="457" selection-start-column="16" selection-end-line="457" selection-end-column="53" />
-          <folding>
-            <element signature="e#598#601#0" expanded="false" />
-            <element signature="e#775#973#0" expanded="false" />
-            <element signature="e#1049#1328#0" expanded="false" />
-            <element signature="e#1417#1660#0" expanded="false" />
-            <element signature="e#1758#2932#0" expanded="false" />
-            <element signature="e#20747#21062#0" expanded="false" />
-            <element signature="e#21183#22512#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/review.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1950">
-          <caret line="78" column="69" lean-forward="true" selection-start-line="78" selection-start-column="69" selection-end-line="78" selection-end-column="69" />
+          <caret line="78" column="30" lean-forward="false" selection-start-line="78" selection-start-column="30" selection-end-line="78" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4900">
-          <caret line="196" column="3" lean-forward="false" selection-start-line="196" selection-start-column="3" selection-end-line="196" selection-end-column="3" />
+        <state relative-caret-position="125">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1406">
+          <caret line="521" column="21" lean-forward="false" selection-start-line="521" selection-start-column="21" selection-end-line="521" selection-end-column="21" />
+          <folding>
+            <element signature="e#602#605#0" expanded="false" />
+            <element signature="e#779#977#0" expanded="false" />
+            <element signature="e#1053#1332#0" expanded="false" />
+            <element signature="e#1421#1664#0" expanded="false" />
+            <element signature="e#1762#2936#0" expanded="false" />
+            <element signature="e#21344#21659#0" expanded="false" />
+            <element signature="e#21780#23109#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/recipe.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
           <folding />
         </state>
       </provider>

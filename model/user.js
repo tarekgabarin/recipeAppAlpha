@@ -13,98 +13,9 @@ const jwt = require('jsonwebtoken');
 /// const {SHA256} = require('crypto-js');
 const _ = require('lodash');
 /// remember to install crypto-js
-const reviewSchema = require('../model/review').reviewSchema;
-
-/*
+const reviewSchema = require('../model/review');
 
 
-let reviewSchema = new Schema();
-
-reviewSchema.add({
-
-
-    rating: {
-        type: Number,
-        min: 1,
-        max: 5,
-        defualt: 0
-    },
-
-    /* here is how the overall score is calculated:
-
-     let total = (this.howEasyToMake + this.howGoodTaste + wouldMakeAgain) / 3
-
-
-
-
-
-     */
-/*
-
-    howEasyToMake: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5
-    },
-
-    howGoodTaste: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5,
-    },
-
-    wouldMakeAgain: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5,
-    },
-
-
-    comment: {
-        type: String,
-        default: ""
-    },
-
-
-    postedBy: {
-        type: String,
-        required: true,
-        index: true
-    },
-
-    reviewOf: {
-        type: String,
-        required: true,
-        index: true
-    },
-
-    recipeName: {
-        type: String,
-        required: true
-    },
-
-    postersCreationDate: {
-        type: Number,
-        required: true
-    },
-
-    chefsCreationDate: {
-        type: Number,
-        required: true
-    },
-
-    chefsId: {
-        type: String,
-        required: true
-    }
-
-
-});
-
-*/
 
 
 let User = new Schema({
@@ -299,4 +210,4 @@ User.plugin(passportLocalMongoose, options);
 
 User = mongoose.model('User', User);
 
-module.exports = {User, reviewSchema};
+module.exports = User;

@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const mongodb = require('mongodb');
 mongoose.Promise = Promise;
 const User = require('../model/user');
-const reviewSchema = require('../model/review').reviewSchema;
+/// const reviewSchema = require('../model/review').reviewSchema;
 
 
 
@@ -439,23 +439,23 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
             console.log('dataObj.chefsCreationDate: ' + dataObj.chefsCreationDate);
             console.log('dataObj.reviewOf: ' + dataObj.reviewOf);
 
-            let review_ = new reviewSchema({
-                wouldMakeAgain: req.body.wouldMakeAgain,
-                howGoodTaste: req.body.howGoodTaste,
-                howEasyToMake: req.body.howEasyToMake,
-                rating: reviewScore,
-                chefsId: votingRecord.chefsId,
-                postersCreationDate: req.decoded.creationDate,
-                postedBy: req.decoded.id,
-                reviewOf: dataObj.reviewOf,
-                chefsCreationDate: dataObj.chefsCreationDate,
-                recipeName: req.params.name
 
-            });
 
             if (votingRecord.alreadyVoted === false && dataObj.newEntry === true){
 
-                recipe.reviewsOfRecipe.push(review_);
+                recipe.reviewsOfRecipe.push({
+                    wouldMakeAgain: req.body.wouldMakeAgain,
+                    howGoodTaste: req.body.howGoodTaste,
+                    howEasyToMake: req.body.howEasyToMake,
+                    rating: reviewScore,
+                    chefsId: votingRecord.chefsId,
+                    postersCreationDate: req.decoded.creationDate,
+                    postedBy: req.decoded.id,
+                    reviewOf: dataObj.reviewOf,
+                    chefsCreationDate: dataObj.chefsCreationDate,
+                    recipeName: req.params.name
+
+                });
 
                 ///// Don't use virtual types because you want Users to search for best and most reviewed recipes
 
@@ -507,7 +507,19 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 if (votingRecord.alreadyVoted === false && dataObj.newEntry === true) {
 
-                    user.usersReviews.push(review_);
+                    user.usersReviews.push({
+                        wouldMakeAgain: req.body.wouldMakeAgain,
+                        howGoodTaste: req.body.howGoodTaste,
+                        howEasyToMake: req.body.howEasyToMake,
+                        rating: reviewScore,
+                        chefsId: votingRecord.chefsId,
+                        postersCreationDate: req.decoded.creationDate,
+                        postedBy: req.decoded.id,
+                        reviewOf: dataObj.reviewOf,
+                        chefsCreationDate: dataObj.chefsCreationDate,
+                        recipeName: req.params.name
+
+                    });
 
                     users.update({$pull: {cookLater: [recipe._id, recipe.creationDate]}});
 

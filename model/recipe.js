@@ -5,7 +5,7 @@ const User = require('../model/user');
 require('mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
 const Schema = mongoose.Schema;
-const reviewSchema = require('../model/review').reviewSchema;
+const reviewSchema = require('../model/review');
 
 
 
@@ -77,6 +77,7 @@ let recipeSchema = new Schema({
 
 
 });
+
 
 
 

@@ -76,4 +76,4 @@ reviewSchema.add({
 
 });
 
-module.exports.reviewSchema = mongoose.model('Review', reviewSchema);
+module.exports = reviewSchema;
