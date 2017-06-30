@@ -463,7 +463,11 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 recipe.update({$inc: {'totalAddedRatings': reviewScore}});
 
-                recipe.reviewAverage();
+                let newAverage = Number(recipe.totalAddedRatings) / Number(recipe.numberOfRatings);
+
+                recipe.update({$set: {reviewAverage: newAverage}});
+
+                recipe.save();
 
             }
 
@@ -481,7 +485,11 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 recipe.update({$inc: {'totalAddedRatings': -reviewScore}});
 
-                recipe.reviewAverage();
+                let newAverage = Number(recipe.totalAddedRatings) / Number(recipe.numberOfRatings);
+
+                recipe.update({$set: {reviewAverage: newAverage}});
+
+                recipe.save();
 
             }
             else if (reviewScore > 3 && !votingRecord.alreadyUpvoted && votingRecord.alreadyVoted && votingRecord.alreadyDownvoted){
@@ -498,7 +506,11 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 recipe.update({$inc: {'totalAddedRatings': reviewScore}});
 
-                recipe.reviewAverage();
+                let newAverage = Number(recipe.totalAddedRatings) / Number(recipe.numberOfRatings);
+
+                recipe.update({$set: {reviewAverage: newAverage}});
+
+                recipe.save();
             }
 
             getUserPromise().then((user) => {
