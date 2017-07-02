@@ -93,7 +93,9 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
     }).then((recipe) => {
 
-        User.update({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersRecipes: [recipe._id, req.decoded.creationDate]}});
+        console.log('Inserting into usersRecipes');
+
+        User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersRecipes: [recipe._id, req.decoded.creationDate]}});
 
     });
 
@@ -177,7 +179,6 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                     if (recipe){
 
-
                         if (recipe.reviewsOfRecipe.length !== 0){
                             for (let i = 0; i < recipe.reviewsOfRecipe.length - 1; i++) {
                                 if (String(recipe.reviewsOfRecipe[i].postedBy) === String(userid)) {
@@ -189,7 +190,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                                         console.log('checkThenGetRecipe is running');
                                         dataObj.chefsId = String(recipe.reviewsOfRecipe[i].chefsId);
                                         dataObj.chefsCreationDate = Number(recipe.reviewsOfRecipe[i].chefsCreationDate);
-                                        dataObj.reviewOf = String(recipe.reviewsOfRecipe[i].reviewOf);
+                                        /// This line below could be a problem since reviewOf is unresolved
+                                        dataObj.reviewOf = String(recipe._id);
                                         ///    dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
                                         ///    dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
                                         dataObj.newEntry = false;
@@ -203,7 +205,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                                         votingRecord.alreadyUpvoted = false;
                                         dataObj.chefsId = String(recipe.reviewsOfRecipe[i].chefsId);
                                         dataObj.chefsCreationDate = Number(recipe.reviewsOfRecipe[i].chefsCreationDate);
-                                        dataObj.reviewOf = String(recipe.reviewsOfRecipe[i].reviewOf);
+                                        dataObj.reviewOf = String(recipe._id);
                                         ///    dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
                                         ///    dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
                                         dataObj.newEntry = false;
@@ -343,51 +345,6 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
         };
 
-        /*
-
-    let gotReviewDataPromise = (recipe) => {
-
-        return new Promise((resolve,  reject) => {
-
-            if (recipe !== undefined && recipe !== null) {
-                if (votingRecord.gotRecipeDocument === true && votingRecord.gotReviewData === true) {
-                    console.log('in resolve loop, recipe._id should be ...' + recipe._id);
-                    console.log('The state of dataObj is...' + dataObj);
-                    resolve(recipe);
-
-                }
-            }
-            else {
-                console.log('The state of dataObj is...' + dataObj.reviewOf);
-                console.log('The state of recipe is...' + recipe);
-                reject('Stuff is still undefined');
-
-            }
-        })
-
-    };
-
-    */
-
-    /*
-
-
-    checkThenGetRecipe(req.params.name, req.params.category, req.decoded.id).then((recipe) => {
-
-        gotReviewDataPromise(recipe).then((recipe) => {
-
-
-            console.log('in callback, recipeDoc._id should be ...' + recipe._id);
-            console.log('The state of dataObj in callback is...' + dataObj);
-            console.log('the state of votingRecord in callback is...' + votingRecord);
-
-        });
-
-
-    });
-
-    */
-
 
 
 
@@ -443,6 +400,10 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
             if (votingRecord.alreadyVoted === false && dataObj.newEntry === true){
 
+                console.log('Inserting review into recipe document');
+
+                console.log('recipe is....' + recipe);
+
                 recipe.reviewsOfRecipe.push({
                     wouldMakeAgain: req.body.wouldMakeAgain,
                     howGoodTaste: req.body.howGoodTaste,
@@ -456,6 +417,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     recipeName: req.params.name
 
                 });
+
+                console.log("In recipe document, reviewsOfRecipe is..." + recipe.reviewsOfRecipe);
 
                 ///// Don't use virtual types because you want Users to search for best and most reviewed recipes
 
@@ -617,7 +580,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 //// Add an if statement that checks if the reviewer and the chef aren't the same person
 
 
-                if (!votingRecord.alreadyUpvoted || (reviewScore > 3 && !votingRecord.alreadyVoted)) {
+                if ((votingRecord.alreadyUpvoted === false && reviewScore > 3) || (reviewScore > 3 && (votingRecord.alreadyVoted === false && votingRecord.newEntry === true))) {
 
                     chef_.update({$addToSet: {'reviewedBy': [req.decoded.id, req.decoded.creationDate]}});
 
@@ -634,7 +597,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     chef_.save();
                 }
 
-                else if (!votingRecord.alreadyDownvoted || ((reviewScore < 3) && !votingRecord.alreadyVoted)) {
+                else if ((votingRecord.alreadyDownvoted === false && reviewScore < 3) || ((reviewScore < 3) && (votingRecord.alreadyVoted === false && votingRecord.newEntry === true))) {
 
                     chef_.update( {
                             $inc: {

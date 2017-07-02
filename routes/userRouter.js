@@ -71,9 +71,14 @@ router.post('/register', (req, res, next) => {
 
                                 let value_ = generateUserToken(user);
 
+                                /*
                                 res.json({token: value_});
 
                                 res.set('x-auth', value_);
+
+                                */
+
+                                res.header('x-auth', value_).send(value_);
 
 
                             });
