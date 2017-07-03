@@ -56,7 +56,7 @@ let recipeSchema = new Schema({
 
   reviewAverage: {
       type: Number,
-      default: undefined
+      default: 0
   },
 
 
@@ -79,7 +79,7 @@ let recipeSchema = new Schema({
 });
 
 
-
+/*
 
 recipeSchema.methods.updateReviewAverage = function(){
 
@@ -88,6 +88,8 @@ recipeSchema.methods.updateReviewAverage = function(){
     this.reviewAverage = this.totalAddedRatings / this.numberOfRatings;
 
 };
+
+*/
 
 
 let Recipe = mongoose.model('Recipe', recipeSchema);
