@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05ce16e8-8225-4a35-bd59-afadb3dab27a" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/testing/recipeRouter_test.js" afterPath="$PROJECT_DIR$/testing/recipeRouter.test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/recipe.js" afterPath="$PROJECT_DIR$/model/recipe.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/review.js" afterPath="$PROJECT_DIR$/model/review.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/recipeRouter.js" afterPath="$PROJECT_DIR$/routes/recipeRouter.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -54,17 +52,16 @@
       <file leaf-file-name="recipeRouter.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="154" column="93" lean-forward="false" selection-start-line="154" selection-start-column="93" selection-end-line="154" selection-end-column="93" />
+            <state relative-caret-position="101">
+              <caret line="390" column="30" lean-forward="false" selection-start-line="390" selection-start-column="30" selection-end-line="390" selection-end-column="30" />
               <folding>
-                <element signature="e#602#605#0" expanded="false" />
-                <element signature="e#779#977#0" expanded="false" />
-                <element signature="e#1053#1332#0" expanded="false" />
-                <element signature="e#1421#1664#0" expanded="false" />
-                <element signature="e#1760#3474#0" expanded="false" />
-                <element signature="e#3615#15581#0" expanded="false" />
-                <element signature="e#15730#16045#0" expanded="false" />
-                <element signature="e#16166#17495#0" expanded="false" />
+                <element signature="e#589#592#0" expanded="false" />
+                <element signature="e#766#964#0" expanded="false" />
+                <element signature="e#1040#1319#0" expanded="false" />
+                <element signature="e#1408#1651#0" expanded="false" />
+                <element signature="e#1747#3461#0" expanded="false" />
+                <element signature="e#18152#18467#0" expanded="false" />
+                <element signature="e#18588#19917#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -73,7 +70,7 @@
       <file leaf-file-name="newAddReviewRouter.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../roughWorkForCheapEat/newAddReviewRouter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
+            <state relative-caret-position="6650">
               <caret line="266" column="23" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
               <folding>
                 <marker date="1499124130498" expanded="true" signature="93:12242" ph="{...}" />
@@ -105,7 +102,7 @@
       <file leaf-file-name="oldAddReviewVer$.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/roughwork/oldAddReviewVer$.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="419">
+            <state relative-caret-position="15675">
               <caret line="1219" column="0" lean-forward="true" selection-start-line="1219" selection-start-column="0" selection-end-line="1219" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -127,8 +124,8 @@
       <file leaf-file-name="review.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/review.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+            <state relative-caret-position="1875">
+              <caret line="75" column="20" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -177,7 +174,6 @@
         <option value="$PROJECT_DIR$/routes/almostPerfectAddReview.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/model/user.js" />
-        <option value="$PROJECT_DIR$/model/review.js" />
         <option value="$PROJECT_DIR$/routes/userRouter.js" />
         <option value="$PROJECT_DIR$/testing/recipeRouter_test.js" />
         <option value="$PROJECT_DIR$/package.json" />
@@ -186,6 +182,7 @@
         <option value="$PROJECT_DIR$/controllers/addReviewController.js" />
         <option value="$PROJECT_DIR$/../roughWorkForCheapEat/newAddReviewRouter.js" />
         <option value="$PROJECT_DIR$/roughwork/oldAddReviewVer$.js" />
+        <option value="$PROJECT_DIR$/model/review.js" />
         <option value="$PROJECT_DIR$/routes/recipeRouter.js" />
       </list>
     </option>
@@ -228,6 +225,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -312,8 +311,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -458,12 +455,14 @@
       <workItem from="1498853977971" duration="1168000" />
       <workItem from="1499015952404" duration="14993000" />
       <workItem from="1499105389123" duration="16844000" />
-      <workItem from="1499124408791" duration="372000" />
+      <workItem from="1499124408791" duration="544000" />
+      <workItem from="1499189694977" duration="5615000" />
+      <workItem from="1499196707376" duration="12000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="178251000" />
+    <option name="totallyTimeSpent" value="184050000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -480,12 +479,12 @@
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07350608" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26274067" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24688561" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -822,10 +821,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/addReviewController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="3" column="1" lean-forward="false" selection-start-line="3" selection-start-column="1" selection-end-line="94" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roughwork/oldAddReviewVer$.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15675">
+          <caret line="1219" column="0" lean-forward="true" selection-start-line="1219" selection-start-column="0" selection-end-line="1219" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../roughWorkForCheapEat/newAddReviewRouter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6650">
+          <caret line="266" column="23" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
+          <folding>
+            <marker date="1499124130498" expanded="true" signature="93:12242" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/review.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+        <state relative-caret-position="1875">
+          <caret line="75" column="20" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
           <folding />
         </state>
       </provider>
@@ -838,47 +865,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/addReviewController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="3" column="1" lean-forward="false" selection-start-line="3" selection-start-column="1" selection-end-line="94" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roughwork/oldAddReviewVer$.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="419">
-          <caret line="1219" column="0" lean-forward="true" selection-start-line="1219" selection-start-column="0" selection-end-line="1219" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../roughWorkForCheapEat/newAddReviewRouter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="266" column="23" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
-          <folding>
-            <marker date="1499124130498" expanded="true" signature="93:12242" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="154" column="93" lean-forward="false" selection-start-line="154" selection-start-column="93" selection-end-line="154" selection-end-column="93" />
+        <state relative-caret-position="101">
+          <caret line="390" column="30" lean-forward="false" selection-start-line="390" selection-start-column="30" selection-end-line="390" selection-end-column="30" />
           <folding>
-            <element signature="e#602#605#0" expanded="false" />
-            <element signature="e#779#977#0" expanded="false" />
-            <element signature="e#1053#1332#0" expanded="false" />
-            <element signature="e#1421#1664#0" expanded="false" />
-            <element signature="e#1760#3474#0" expanded="false" />
-            <element signature="e#3615#15581#0" expanded="false" />
-            <element signature="e#15730#16045#0" expanded="false" />
-            <element signature="e#16166#17495#0" expanded="false" />
+            <element signature="e#589#592#0" expanded="false" />
+            <element signature="e#766#964#0" expanded="false" />
+            <element signature="e#1040#1319#0" expanded="false" />
+            <element signature="e#1408#1651#0" expanded="false" />
+            <element signature="e#1747#3461#0" expanded="false" />
+            <element signature="e#18152#18467#0" expanded="false" />
+            <element signature="e#18588#19917#0" expanded="false" />
           </folding>
         </state>
       </provider>

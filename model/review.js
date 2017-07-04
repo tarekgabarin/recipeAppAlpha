@@ -70,6 +70,10 @@ reviewSchema.add({
 
     chefsId: {
         type: String
+    },
+
+    recipeName: {
+        type: String
     }
 
 
