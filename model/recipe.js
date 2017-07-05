@@ -59,8 +59,6 @@ let recipeSchema = new Schema({
       default: 0
   },
 
-
-
   postersCreationDate: {
     type: Number,
     index: true
@@ -78,18 +76,67 @@ let recipeSchema = new Schema({
 
 });
 
-
-/*
-
-recipeSchema.methods.updateReviewAverage = function(){
-
+recipeSchema.pre('save', function(next) {
     let recipe = this;
 
-    this.reviewAverage = this.totalAddedRatings / this.numberOfRatings;
+    if (recipe.numberOfRatings === 0  && recipe.totalAddedRatings === 0){
+        console.log('Both are 0');
+        recipe.reviewAverage = 0;
+    }
+    else {
+        console.log("Both aren't zero");
+        recipe.reviewAverage = recipe.totalAddedRatings / recipe.numberOfRatings
+    }
+
+    next();
+});
+
+
+/*
+recipeSchema.methods.calculateAverage = function(){
+
+  let recipe = this;
+
+  if (recipe.numberOfRatings === 0  && recipe.totalAddedRatings === 0){
+    recipe.reviewAverage = 0;
+  }
+  else {
+
+
+    recipe.reviewAverage = recipe.totalAddedRatings / recipe.numberOfRatings
+
+
+  }
+
 
 };
+*/
+
+
+
+/*
+recipeSchema.virtual('reviewAverage').get(function() {
+
+  let recipe =  this;
+
+    if (recipe.numberOfRatings === 0  && recipe.totalAddedRatings === 0){
+        recipe.reviewAverage = 0;
+    }
+    else {
+
+
+        recipe.reviewAverage = recipe.totalAddedRatings / recipe.numberOfRatings
+
+
+    }
+
+});
 
 */
+
+
+
+
 
 
 let Recipe = mongoose.model('Recipe', recipeSchema);

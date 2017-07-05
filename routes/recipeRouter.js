@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const mongodb = require('mongodb');
 mongoose.Promise = Promise;
 const User = require('../model/user');
+const reviewController = require('../controllers/reviewController');
 /// const reviewSchema = require('../model/review');
 
 
@@ -181,106 +182,19 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
         newEntry: undefined
     };
 
-    let checkThenGetRecipe = (name, category, userid) => {
-
-        //// This checks through a users reviewsOfRecipe array, updates the votingRecord
-        ///based on what it finds, and then returns the Recipe document in question
 
 
 
-        return Recipe.findOne({name: name, category: category})
-
-            .then((recipe) => {
-
-                console.log('1 - recipe is...' + recipe);
-
-                console.log('length of recipe.reviewsOfRecipe is..' + recipe.reviewsOfRecipe.length);
-
-                if (recipe){
-
-                    if (recipe.reviewsOfRecipe.length !== 0){
-                        for (let i = 0; i < recipe.reviewsOfRecipe.length - 1; i++) {
-                            if (String(recipe.reviewsOfRecipe[i].postedBy) === String(userid)) {
-                                votingRecord.alreadyVoted = true;
-                                //  votingRecord.ranFirstProcess = true;
-                                if (Number(recipe.reviewsOfRecipe[i].rating) > 3) {
-                                    votingRecord.alreadyUpvoted = true;
-                                    votingRecord.alreadyDownvoted = false;
-                                    console.log('checkThenGetRecipe is running');
-                                    dataObj.chefsId = String(recipe.reviewsOfRecipe[i].chefsId);
-                                    dataObj.chefsCreationDate = Number(recipe.reviewsOfRecipe[i].chefsCreationDate);
-                                    /// This line below could be a problem since reviewOf is unresolved
-                                    dataObj.reviewOf = String(recipe._id);
-                                    ///    dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
-                                    ///    dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
-                                    dataObj.newEntry = false;
-                                    votingRecord.gotRecipeDocument = true;
-                                    votingRecord.gotReviewData = true;
-                                    return recipe;
-
-                                }
-                                else if (Number(recipe.reviewsOfRecipe[i].rating) < 3) {
-                                    votingRecord.alreadyDownvoted = true;
-                                    votingRecord.alreadyUpvoted = false;
-                                    dataObj.chefsId = String(recipe.reviewsOfRecipe[i].chefsId);
-                                    dataObj.chefsCreationDate = Number(recipe.reviewsOfRecipe[i].chefsCreationDate);
-                                    dataObj.reviewOf = String(recipe._id);
-                                    ///    dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
-                                    ///    dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
-                                    dataObj.newEntry = false;
-                                    votingRecord.gotRecipeDocument = true;
-                                    votingRecord.gotReviewData = true;
-                                    return recipe;
-                                }
-                            }
-                            else {
-                                dataObj.chefsId = String(recipe.postedBy);
-                                dataObj.chefsCreationDate = Number(recipe.postersCreationDate);
-                                /// When I commneted this out, I still got error
-                                dataObj.reviewOf = String(recipe._id);
-                                dataObj.newEntry = true;
-                                votingRecord.alreadyVoted = false;
-                                votingRecord.gotReviewData = true;
-                                votingRecord.gotRecipeDocument = true;
-                                return recipe;
-
-                            }
-                        }
-
-                    }
-
-                    else {
-
-                        dataObj.chefsId = String(recipe.postedBy);
-                        dataObj.chefsCreationDate = Number(recipe.postersCreationDate);
-                        console.log('Was already reviewed!!!!!!!!!');
-                        /// When I commneted this out, I still got error
-                        dataObj.reviewOf = String(recipe._id);
-                        dataObj.newEntry = true;
-                        votingRecord.alreadyVoted = false;
-                        votingRecord.gotReviewData = true;
-                        votingRecord.gotRecipeDocument = true;
-                        return recipe;
-
-
-
-                    }
-
-
-
-                }
-
-
-            });
-
-
-    };
 
     let gotReviewDataPromise = () => {
 
         return new Promise((resolve, reject) => {
 
-            checkThenGetRecipe(req.params.name, req.params.category, req.decoded.id).then((recipe) => {
+            console.log("votingRecord is..." + votingRecord);
+
+            console.log('req,decoded is...' + req.decoded);
+
+            reviewController.checkThenGetRecipe(dataObj, votingRecord, req.params.name, req.params.category, req.decoded.id).then((recipe) => {
 
                 if (recipe !== undefined && recipe !== null) {
                     if (votingRecord.gotRecipeDocument === true && votingRecord.gotReviewData === true) {
@@ -328,13 +242,92 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
         if (votingRecord.alreadyVoted === false && dataObj.newEntry === true){
 
-            console.log('Inserting review into recipe document');
 
-            console.log('recipe is....' + recipe);
+
+
+
+            Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate},{$inc: {numberOfRatings: 1, totalAddedRatings: reviewScore}}).then(() => {
+
+                console.log('Inserting review into recipe document');
+
+                console.log('recipe is....' + recipe);
+
+                recipe.reviewedBy.push([String(req.decoded.id), req.decoded.creationDate]);
+
+                recipe.reviewsOfRecipe.push({
+                    wouldMakeAgain: req.body.wouldMakeAgain,
+                    howGoodTaste: req.body.howGoodTaste,
+                    howEasyToMake: req.body.howEasyToMake,
+                    rating: reviewScore,
+                    chefsId: votingRecord.chefsId,
+                    postersCreationDate: req.decoded.creationDate,
+                    postedBy: req.decoded.id,
+                    reviewOf: dataObj.reviewOf,
+                    chefsCreationDate: dataObj.chefsCreationDate,
+                    recipeName: req.params.name
+                });
+
+                if (reviewScore > 3){
+
+                    recipe.likedBy.push([String(req.decoded.id), req.decoded.creationDate]);
+
+                }
+
+                console.log('before saving, recipe.numberOfRatings is...' + recipe.numberOfRatings);
+
+                console.log('before saving, recipe.totalAddedRatings is...' + recipe.totalAddedRatings);
+
+                recipe.save();
+            });
+
+
+
+            /// recipe.save();
+
+
+
+
+
+
+                /*
+
+
+                console.log('recipeInfo is...' + recipeInfo);
+
+                console.log('recipeInfo.totalAddedRatings is...' + recipeInfo.totalAddedRatings);
+
+                console.log('recipeInfo.numberOfRatings is...' + recipeInfo.numberOfRatings);
+
+                let newAverage = Number(recipeInfo.totalAddedRatings) / Number(recipeInfo.numberOfRatings);
+
+                Recipe.findOneAndUpdate({_id: recipeInfo._id, postersCreationDate: recipeInfo.postersCreationDate}, {$set: {reviewAverage: newAverage}});
+
+                */
+
+
+
+              ///  newRecipe.reviewAverage; or newRecipe.reviewAverage() doesn't work
+
+             //   console.log('newRecipe.totalAddedRatings is...' + newRecipe.totalAddedRatings);
+
+              //  console.log('newRecipe.numberOfRatings is...' + newRecipe.numberOfRatings);
+
+                /// TODO I can successfully update number of reviews and total added but calculating review average may have to be done via a virtual type
+
+               // let newAverage = Number(newRecipe.totalAddedRatings) / Number(newRecipe.numberOfRatings);
+
+              //  console.log('newAverage is...' + newAverage);
+
+                /// TODO reviewAverage isn't being set
+
+               // Recipe.update({_id: newRecipe._id, postersCreationDate: recipe.postersCreationDate}, {$set: {reviewAverage: newAverage}});
+
+
+
 
 /// This stupid thing is finally fucking working
 
-            /// TODO Make sure that the review gets inside reviewsOfRecipe
+
 
             /*
 
@@ -374,7 +367,14 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
             */
 
+            /*
+
             Recipe.findOne({_id: recipe._id, postersCreationDate: recipe.postersCreationDate}).then((recipe) => {
+
+                //  this better work
+
+                recipe.reviewedBy.push([String(req.decoded.id), req.decoded.creationDate]);
+
                 recipe.reviewsOfRecipe.push({
                     wouldMakeAgain: req.body.wouldMakeAgain,
                     howGoodTaste: req.body.howGoodTaste,
@@ -388,8 +388,20 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     recipeName: req.params.name
                 });
 
+                if (reviewScore > 3){
+
+                    recipe.likedBy.push([String(req.decoded.id), req.decoded.creationDate]);
+
+                }
+
+                let newAverage =
+
+
+
                 recipe.save();
             });
+
+            */
 
 
             /*
@@ -414,17 +426,112 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
 
 
+            /*
+
             Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate},{$inc: {numberOfRatings: 1, totalAddedRatings: reviewScore}}, {returnNewDocument: true}).then((newRecipe) => {
 
                 let newAverage = Number(newRecipe.totalAddedRatings) / Number(newRecipe.numberOfRatings);
 
+                console.log('newAverage is...' + newAverage);
+
                 /// TODO reviewAverage isn't being set
 
-                Recipe.findOneAndUpdate({_id: newRecipe._id, postersCreationDate: recipe.postersCreationDate}, {$set: {reviewAverage: newAverage}});
+                newRecipe.update({$set: {reviewAverage: newAverage}});
+
+                recipe.save()
+
+              //  Recipe.update({_id: newRecipe._id, postersCreationDate: recipe.postersCreationDate}, {$set: {reviewAverage: newAverage}});
 
             });
 
+            */
+
             //// TODO fix this one
+
+            User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+
+                user.usersReviews.push({
+                    wouldMakeAgain: req.body.wouldMakeAgain,
+                    howGoodTaste: req.body.howGoodTaste,
+                    howEasyToMake: req.body.howEasyToMake,
+                    rating: reviewScore,
+                    chefsId: votingRecord.chefsId,
+                    postersCreationDate: req.decoded.creationDate,
+                    postedBy: req.decoded.id,
+                    reviewOf: dataObj.reviewOf,
+                    chefsCreationDate: dataObj.chefsCreationDate,
+                    recipeName: req.params.name
+
+                });
+
+                if (reviewScore > 3) {
+
+                    user.usersFavouriteRecipes.push([dataObj.reviewOf, dataObj.chefsCreationDate])
+                }
+
+                user.update({$pull: {cookLater: [recipe._id, recipe.creationDate]}});
+
+                user.save();
+
+            });
+
+            if (reviewScore > 3) {
+
+                //User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersFavouriteRecipes: [dataObj.reviewOf, dataObj.chefsCreationDate]}});
+               // Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate}, {$push: {likedBy: [String(req.decoded.id), req.decoded.creationDate]}});
+                User.findOneAndUpdate({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}, { $inc: {chefKarma: 1}});
+
+            }
+
+            else if (reviewScore < 3){
+
+                User.findOneAndUpdate({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}, { $inc: {chefKarma: -1}});
+
+            }
+
+
+
+
+
+
+            /*
+
+            User.update({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersReviews: {
+                wouldMakeAgain: req.body.wouldMakeAgain,
+                howGoodTaste: req.body.howGoodTaste,
+                howEasyToMake: req.body.howEasyToMake,
+                rating: reviewScore,
+                chefsId: votingRecord.chefsId,
+                postersCreationDate: req.decoded.creationDate,
+                postedBy: req.decoded.id,
+                reviewOf: dataObj.reviewOf,
+                chefsCreationDate: dataObj.chefsCreationDate,
+                recipeName: req.params.name
+
+            }}});
+
+            */
+
+
+            /*
+
+            User.findByIdAndUpdate(req,decoded.id, {$push: {usersReviews: {
+                wouldMakeAgain: req.body.wouldMakeAgain,
+                howGoodTaste: req.body.howGoodTaste,
+                howEasyToMake: req.body.howEasyToMake,
+                rating: reviewScore,
+                chefsId: votingRecord.chefsId,
+                postersCreationDate: req.decoded.creationDate,
+                postedBy: req.decoded.id,
+                reviewOf: dataObj.reviewOf,
+                chefsCreationDate: dataObj.chefsCreationDate,
+                recipeName: req.params.name
+
+            }}});
+
+            */
+
+            /*
 
             User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersReviews: {
                 wouldMakeAgain: req.body.wouldMakeAgain,
@@ -439,6 +546,10 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 recipeName: req.params.name
 
             }}});
+
+            */
+
+            /*
 
             User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$pull: {cookLater: [recipe._id, recipe.creationDate]}});
 
@@ -456,9 +567,97 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
             }
 
+            */
+
+        }
+        else {
+            res.send('user already submitted a review');
         }
 
-        else if (votingRecord.alreadyVoted === true && dataObj.newEntry === false){
+
+    })
+
+});
+
+
+// Edit a review for a recipe
+
+router.post(':category/:name/editReview', authentication.verifyOrdinaryUser, function(req, res, next){
+
+    let reviewScore = (Number(req.body.howGoodTaste) + Number(req.body.wouldMakeAgain) + Number(req.body.howEasyToMake)) / 3;
+
+    console.log(reviewScore);
+
+    console.log(typeof(reviewScore));
+
+    let votingRecord = {
+        alreadyVoted: undefined,
+        alreadyDownvoted: undefined,
+        alreadyUpvoted: undefined,
+        gotReviewData: false,
+        gotChefDocument: false,
+        gotUserDocument: false,
+        gotRecipeDocument: false
+    };
+
+    let dataObj = {
+
+        chefsId: undefined,
+        chefsCreationDate: undefined,
+        reviewOf: undefined,
+        recipeName: req.params.name,
+        postersCreationDate: req.decoded.creationDate,
+        postedBy: req.decoded.id,
+        newEntry: undefined
+    };
+
+    let gotReviewDataPromise = () => {
+
+        return new Promise((resolve, reject) => {
+
+
+            reviewController.checkThenGetRecipe(dataObj, votingRecord, req.params.name, req.params.category, req.decoded.id).then((recipe) => {
+
+                if (recipe !== undefined && recipe !== null) {
+                    if (votingRecord.gotRecipeDocument === true && votingRecord.gotReviewData === true) {
+                        console.log('in resolve loop, recipe._id should be ...' + recipe._id);
+                        console.log('The state of dataObj is...' + dataObj);
+                        resolve(recipe)
+
+                    }
+                }
+                ///
+                else {
+                    console.log('The state of dataObj is...' + dataObj.reviewOf);
+                    console.log('The state of recipe is...' + recipe);
+                    reject('Stuff is still undefined');
+
+                }
+
+
+            });
+
+
+        });
+
+
+    };
+
+    gotReviewDataPromise().then((recipe) => {
+
+
+        console.log('in callback, recipeDoc._id should be ...' + recipe._id);
+        console.log('The state of dataObj in callback is...' + dataObj.recipeName);
+        console.log('votingRecord.gotRecipeDocument: ' + votingRecord.gotRecipeDocument);
+        console.log('votingRecord.gotReviewData: ' + votingRecord.gotReviewData);
+        console.log('votingRecord.alreadyVoted: ' + votingRecord.alreadyVoted);
+        console.log('votingRecord.alreadyUpvoted: ' + votingRecord.alreadyUpvoted);
+        console.log('votingRecord.alreadyDownvoted: ' + votingRecord.alreadyDownvoted);
+        console.log('dataObj.chefsId: ' + dataObj.chefsId);
+        console.log('dataObj.chefsCreationDate: ' + dataObj.chefsCreationDate);
+        console.log('dataObj.reviewOf: ' + dataObj.reviewOf);
+
+        if (votingRecord.alreadyVoted === true && dataObj.newEntry === false) {
 
             User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {'usersReviews.reviewOf': dataObj.reviewOf}, {
                 $set: {
@@ -491,10 +690,15 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
         }
 
+        else {
+            res.send('User has not submitted a review yet to be edited')
+        }
+
 
     })
 
 });
+
 
 
 /// Saving a recipe to cook then review later

@@ -1,7 +1,7 @@
 const Recipe = require('../model/recipe');
 
 
-exports.checkThenGetRecipe = (name, category, userid) => {
+exports.checkThenGetRecipe = (dataObj, votingRecord, name, category, userid) => {
 
     //// This checks through a users reviewsOfRecipe array, updates the votingRecord
     ///based on what it finds, and then returns the Recipe document in question
