@@ -19,7 +19,7 @@ exports.checkThenGetRecipe = (dataObj, votingRecord, name, category, userid) => 
             if (recipe){
 
                 if (recipe.reviewsOfRecipe.length !== 0){
-                    for (let i = 0; i < recipe.reviewsOfRecipe.length - 1; i++) {
+                    for (let i = 0; i <= recipe.reviewsOfRecipe.length; i++) {
                         if (String(recipe.reviewsOfRecipe[i].postedBy) === String(userid)) {
                             votingRecord.alreadyVoted = true;
                             //  votingRecord.ranFirstProcess = true;
@@ -27,12 +27,12 @@ exports.checkThenGetRecipe = (dataObj, votingRecord, name, category, userid) => 
                                 votingRecord.alreadyUpvoted = true;
                                 votingRecord.alreadyDownvoted = false;
                                 console.log('checkThenGetRecipe is running');
-                                dataObj.chefsId = String(recipe.reviewsOfRecipe[i].chefsId);
-                                dataObj.chefsCreationDate = Number(recipe.reviewsOfRecipe[i].chefsCreationDate);
+                                dataObj.chefsId = String(recipe.postedBy);
+                                dataObj.chefsCreationDate = Number(recipe.postersCreationDate);
                                 /// This line below could be a problem since reviewOf is unresolved
                                 dataObj.reviewOf = String(recipe._id);
-                                ///    dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
-                                ///    dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
+                               // dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
+                               // dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
                                 dataObj.newEntry = false;
                                 votingRecord.gotRecipeDocument = true;
                                 votingRecord.gotReviewData = true;
@@ -42,11 +42,11 @@ exports.checkThenGetRecipe = (dataObj, votingRecord, name, category, userid) => 
                             else if (Number(recipe.reviewsOfRecipe[i].rating) < 3) {
                                 votingRecord.alreadyDownvoted = true;
                                 votingRecord.alreadyUpvoted = false;
-                                dataObj.chefsId = String(recipe.reviewsOfRecipe[i].chefsId);
-                                dataObj.chefsCreationDate = Number(recipe.reviewsOfRecipe[i].chefsCreationDate);
+                                dataObj.chefsId = String(recipe.postedBy);
+                                dataObj.chefsCreationDate = Number(recipe.postersCreationDate);
                                 dataObj.reviewOf = String(recipe._id);
-                                ///    dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
-                                ///    dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
+                                // dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
+                                // dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
                                 dataObj.newEntry = false;
                                 votingRecord.gotRecipeDocument = true;
                                 votingRecord.gotReviewData = true;
@@ -62,6 +62,7 @@ exports.checkThenGetRecipe = (dataObj, votingRecord, name, category, userid) => 
                             votingRecord.alreadyVoted = false;
                             votingRecord.gotReviewData = true;
                             votingRecord.gotRecipeDocument = true;
+                            console.log('users did review recipe');
                             return recipe;
 
                         }

@@ -54,10 +54,6 @@ let recipeSchema = new Schema({
       default: 0
   },
 
-  reviewAverage: {
-    type: Number,
-    default: 0
-  },
 
   postersCreationDate: {
     type: Number,
@@ -75,19 +71,6 @@ let recipeSchema = new Schema({
 
 
 });
-
-recipeSchema.methods.calculateAverage = function() {
-    let recipe = this;
-    if (recipe.numberOfRatings === 0  && recipe.totalAddedRatings === 0) {
-        recipe.reviewAverage = 0;
-    }
-    else {
-        recipe.reviewAverage = recipe.totalAddedRatings / recipe.numberOfRatings
-    }
-    recipe.save(function (err)  {
-        if (err) return handleError(err)
-    });
-};
 
 
 
@@ -113,7 +96,7 @@ recipeSchema.methods.calculateAverage = function(){
 
 
 
-/*
+
 recipeSchema.virtual('reviewAverage').get(function() {
 
   let recipe =  this;
@@ -131,7 +114,7 @@ recipeSchema.virtual('reviewAverage').get(function() {
 
 });
 
-*/
+
 
 
 
