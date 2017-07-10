@@ -172,7 +172,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
         recipeName: req.params.name,
         postersCreationDate: req.decoded.creationDate,
         postedBy: req.decoded.id,
-        newEntry: undefined
+        newEntry: undefined,
+        reviewIndex: undefined
     };
 
 
@@ -341,9 +342,181 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
 
         }
-        else {
+        else  if (votingRecord.alreadyVoted === true && dataObj.newEntry === false) {
 
-            res.send('Review already submitted!');
+            console.log('review is being editied');
+
+
+            /// This works
+
+            recipe.reviewsOfRecipe[dataObj.reviewIndex] = {
+                wouldMakeAgain: req.body.wouldMakeAgain,
+                howGoodTaste: req.body.howGoodTaste,
+                howEasyToMake: req.body.howEasyToMake,
+                rating: reviewScore,
+                comment: req.body.comment,
+                postersCreationDate: req.decoded.creationDate,
+                postedBy: req.decoded.id,
+                chefsCreationDate: dataObj.chefsCreationDate,
+                chefsId: dataObj.chefsId,
+                reviewOf: dataObj.reviewOf
+
+            };
+
+            /// TODO This does not work and its supposed to be in the other if statements below dumb dumb
+
+           /// recipe.update({$pull: {likedBy: [String(req.decoded.id), req.decoded.creationDate]}});
+
+
+
+            recipe.save();
+
+            /// TODO This def does not work
+
+            User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate, 'usersReviews.reviewOf': dataObj.reviewOf}, {
+                $set: {
+                    'usersReviews.$.wouldMakeAgain': req.body.wouldMakeAgain,
+                    'usersReviews.$.howGoodTaste': req.body.howGoodTaste,
+                    'usersReviews.$.howEasyToMake': req.body.howEasyToMake,
+                    'usersReviews.$.rating': reviewScore,
+                    'usersReviews.$.comment': req.body.comment,
+                    'usersReviews.$.chefsId': dataObj.chefsId,
+                    'usersReviews.$.chefsCreationDate': dataObj.chefsCreationDate,
+                    'usersReviews.$.postedBy': req.decoded.id,
+                    'usersReviews.$.reviewOf': dataObj.reviewOf,
+                    'usersReviews.$.postersCreationDate': req.decoded.creationDate
+
+                }
+            });
+
+
+
+            /*
+
+            User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+
+                for (let i = 0; i <= user.usersReviews.length; i++){
+                    if (String(user.usersReviews[i].recipeName) ===  String(req.params.name)){
+                        user.usersReviews[i] = {
+
+                            wouldMakeAgain: req.body.wouldMakeAgain,
+                            howGoodTaste: req.body.howGoodTaste,
+                            howEasyToMake: req.body.howEasyToMake,
+                            rating: reviewScore,
+                            comment: req.body.comment,
+
+                        };
+
+                    }
+                }
+
+                if (reviewScore < 3 && (votingRecord.alreadyUpvoted === true && votingRecord.alreadyDownvoted === false)){
+
+                    user.update({$pull: {usersFavouriteRecipes: [dataObj.reviewOf, dataObj.chefsCreationDate]}});
+                }
+
+                else if (reviewScore > 3 && votingRecord.alreadyUpvoted === false && votingRecord.alreadyDownvoted === true) {
+
+
+                }
+
+            });
+
+            */
+
+
+
+            /*
+
+            User.where({_id: req.decoded.id, creationDate: req.decoded.creationDate}).update({'usersReviews.reviewOf': dataObj.reviewOf}, {
+                $set: {
+                    'usersReviews.$.wouldMakeAgain': req.body.wouldMakeAgain,
+                    'usersReviews.$.howGoodTaste': req.body.howGoodTaste,
+                    'usersReviews.$.howEasyToMake': req.body.howEasyToMake,
+                    'usersReviews.$.rating': reviewScore,
+                    'usersReviews.$.comment': req.body.comment,
+                    'usersReviews.$.chefsId': dataObj.chefsId
+                }
+            });
+
+            */
+
+            /*
+
+             /// Didn't test it out yet, but doesn't seem right
+
+             User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {'usersReviews.reviewOf': dataObj.reviewOf}, {
+             $set: {
+             'usersReviews.$.wouldMakeAgain': req.body.wouldMakeAgain,
+             'usersReviews.$.howGoodTaste': req.body.howGoodTaste,
+             'usersReviews.$.howEasyToMake': req.body.howEasyToMake,
+             'usersReviews.$.rating': reviewScore,
+             'usersReviews.$.comment': req.body.comment,
+             'usersReviews.$.chefsId': dataObj.chefsId
+             }
+             });
+
+             */
+
+            if (reviewScore < 3 && (votingRecord.alreadyUpvoted === true && votingRecord.alreadyDownvoted === false)) {
+
+               /// User.where({_id: req.decoded.id, creationDate: req.decoded.creationDate}).update({$pull: {usersFavouriteRecipes: [dataObj.reviewOf, dataObj.chefsCreationDate]}});
+
+                Recipe.findOneAndUpdate({_id: recipe.id, postersCreationDate: recipe.postersCreationDate}, {$pull: {likedBy: [String(req.decoded.id), req.decoded.creationDate]}});
+
+
+
+                User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$pull: {usersFavouriteRecipes: [[dataObj.reviewOf, dataObj.chefsCreationDate]]}});
+
+
+                // TODO chefKarma not being updated with the line below 
+
+                User.where({_id: recipe.postedBy, creationDate: recipe.postersCreationDate}).update({ $inc: {chefKarma: -1}});
+
+                /*
+
+                 /// Old Version
+
+                 User.findOneAndUpdate({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}, { $inc: {chefKarma: -1}});
+
+
+                 */
+
+
+
+                res.json(recipe);
+
+                /*
+                 // Old version
+
+                 Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate}, {$pull: {likedBy: [String(req.decoded.id), req.decoded.creationDate]}});
+
+
+                 */
+
+            }
+
+            else if (reviewScore > 3 && votingRecord.alreadyUpvoted === false && votingRecord.alreadyDownvoted === true) {
+
+                User.where({_id: req.decoded.id, creationDate: req.decoded.creationDate}).update({$push: {usersFavouriteRecipes: [dataObj.reviewOf, dataObj.chefsCreationDate]}});
+
+                User.where({_id: recipe.postedBy, creationDate: recipe.postersCreationDate}).update({ $inc: {chefKarma: 1}});
+
+                recipe.update({$push: {likedBy: [String(req.decoded.id), req.decoded.creationDate]}});
+
+                res.json(recipe);
+
+
+                /*
+
+                 User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersFavouriteRecipes: [dataObj.reviewOf, dataObj.chefsCreationDate]}});
+                 Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate}, {$push: {likedBy: [String(req.decoded.id), req.decoded.creationDate]}});
+                 User.findOneAndUpdate({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}, { $inc: {chefKarma: 1}});
+
+                 */
+
+
+            }
         }
 
 

@@ -34,6 +34,7 @@ exports.checkThenGetRecipe = (dataObj, votingRecord, name, category, userid) => 
                                // dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
                                // dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
                                 dataObj.newEntry = false;
+                                dataObj.reviewIndex = i;
                                 votingRecord.gotRecipeDocument = true;
                                 votingRecord.gotReviewData = true;
                                 return recipe;
@@ -48,6 +49,7 @@ exports.checkThenGetRecipe = (dataObj, votingRecord, name, category, userid) => 
                                 // dataObj.postersCreationDate = Number(recipe.reviewsOfRecipe[i].postersCreationDate);
                                 // dataObj.postedBy = String(recipe.reviewsOfRecipe[i].postedBy);
                                 dataObj.newEntry = false;
+                                dataObj.reviewIndex = i;
                                 votingRecord.gotRecipeDocument = true;
                                 votingRecord.gotReviewData = true;
                                 return recipe;
