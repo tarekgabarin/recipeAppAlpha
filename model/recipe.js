@@ -55,8 +55,8 @@ let recipeSchema = new Schema({
   },
 
   reviewAverage: {
-      type: Number,
-      default: 0
+    type: Number,
+    default: 0
   },
 
   postersCreationDate: {
@@ -76,20 +76,19 @@ let recipeSchema = new Schema({
 
 });
 
-recipeSchema.pre('save', function(next) {
+recipeSchema.methods.calculateAverage = function() {
     let recipe = this;
-
-    if (recipe.numberOfRatings === 0  && recipe.totalAddedRatings === 0){
-        console.log('Both are 0');
+    if (recipe.numberOfRatings === 0  && recipe.totalAddedRatings === 0) {
         recipe.reviewAverage = 0;
     }
     else {
-        console.log("Both aren't zero");
         recipe.reviewAverage = recipe.totalAddedRatings / recipe.numberOfRatings
     }
+    recipe.save(function (err)  {
+        if (err) return handleError(err)
+    });
+};
 
-    next();
-});
 
 
 /*

@@ -4,7 +4,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
     /// add a review of a recipe
 
-    // TODO I maybe be split this into a route that adds a new review and one that actually edits it
+
 
     let reviewScore = (Number(req.body.howGoodTaste) + Number(req.body.wouldMakeAgain) + Number(req.body.howEasyToMake)) / 3;
 
@@ -229,7 +229,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                     }
                 }
-                /// Todo this reject occurs whenever a user tries to edit review
+
                 else {
                     console.log('The state of dataObj is...' + dataObj.reviewOf);
                     reject('Stuff is still undefined');
@@ -302,7 +302,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
             ///// Don't use virtual types because you want Users to search for best and most reviewed recipes
 
-            // TODO : These don't work
+
 
             recipe.update({$inc: {numberOfRatings: 1}});
 

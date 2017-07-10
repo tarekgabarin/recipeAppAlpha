@@ -25,8 +25,8 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
 
-  /// the starting req.params.page is 0
-  let skip_ = 10 * Number(req.params.page);
+    /// the starting req.params.page is 0
+    let skip_ = 10 * Number(req.params.page);
 
     Recipe.find({}, (err, recipes) => {
 
@@ -42,13 +42,13 @@ router.get('/:category/', (req, res) => {
 
     // the first page will be zero to avoid unintentionally skipping over first 10
 
-  let skip_ = 10 * Number(req.params.page);
+    let skip_ = 10 * Number(req.params.page);
 
-  Recipe.find({category: req.params.category}, (err, recipe) => {
-    if (err) res.send(err);
+    Recipe.find({category: req.params.category}, (err, recipe) => {
+        if (err) res.send(err);
 
-    res.json(recipes)
-  }).skip(skip_).limit(10);
+        res.json(recipes)
+    }).skip(skip_).limit(10);
 
 });
 
@@ -58,11 +58,11 @@ router.get('/:category/:name', (req, res) => {
 
     /// I assume that you'll get the reviews as well as the recipe with this one
 
-  Recipe.findOne({category: req.params.category, name: req.params.name}, (err, recipe) => {
-    if (err) res.send(err);
+    Recipe.findOne({category: req.params.category, name: req.params.name}, (err, recipe) => {
+        if (err) res.send(err);
 
-    res.json(recipe);
-  }).lean();
+        res.json(recipe);
+    }).lean();
 
 });
 
@@ -72,7 +72,7 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
     console.log('the route is running now!');
 
-  //  req.decoded = decoded;
+    //  req.decoded = decoded;
 
 
     console.log('is decoded working....' + req.decoded.id);
@@ -120,29 +120,22 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
 
     /*
-
-    let newRecipe = new Recipe({
-
-        name: req.body.name,
-        description: req.body.description,
-        steps: req.body.steps,
-        ingredients: req.body.ingredients,
-        category: req.body.category,
-        postedBy: req.decoded.id,
-        postersCreationDate: req.decoded.creationDate,
-        postersName: req.decoded.username
-    });
-
-    newRecipe.save()
-
-        .then((err, recipe) => {
-        if (err) console.log(err);
-
-        res.json(recipe);
-
-    })
-
-    */
+     let newRecipe = new Recipe({
+     name: req.body.name,
+     description: req.body.description,
+     steps: req.body.steps,
+     ingredients: req.body.ingredients,
+     category: req.body.category,
+     postedBy: req.decoded.id,
+     postersCreationDate: req.decoded.creationDate,
+     postersName: req.decoded.username
+     });
+     newRecipe.save()
+     .then((err, recipe) => {
+     if (err) console.log(err);
+     res.json(recipe);
+     })
+     */
 
 
 
@@ -151,7 +144,7 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
 /// Adding Review
 
-/// TODO test this Out
+/// TODO Still need to fix and finish this
 
 router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req, res, next) {
 
@@ -244,8 +237,6 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
 
 
-
-
             Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate},{$inc: {numberOfRatings: 1, totalAddedRatings: reviewScore}}).then(() => {
 
                 console.log('Inserting review into recipe document');
@@ -277,176 +268,15 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 console.log('before saving, recipe.totalAddedRatings is...' + recipe.totalAddedRatings);
 
-                recipe.save();
-            });
-
-
-
-            /// recipe.save();
-
-
-
-
-
-
-                /*
-
-
-                console.log('recipeInfo is...' + recipeInfo);
-
-                console.log('recipeInfo.totalAddedRatings is...' + recipeInfo.totalAddedRatings);
-
-                console.log('recipeInfo.numberOfRatings is...' + recipeInfo.numberOfRatings);
-
-                let newAverage = Number(recipeInfo.totalAddedRatings) / Number(recipeInfo.numberOfRatings);
-
-                Recipe.findOneAndUpdate({_id: recipeInfo._id, postersCreationDate: recipeInfo.postersCreationDate}, {$set: {reviewAverage: newAverage}});
-
-                */
-
-
-
-              ///  newRecipe.reviewAverage; or newRecipe.reviewAverage() doesn't work
-
-             //   console.log('newRecipe.totalAddedRatings is...' + newRecipe.totalAddedRatings);
-
-              //  console.log('newRecipe.numberOfRatings is...' + newRecipe.numberOfRatings);
-
-                /// TODO I can successfully update number of reviews and total added but calculating review average may have to be done via a virtual type
-
-               // let newAverage = Number(newRecipe.totalAddedRatings) / Number(newRecipe.numberOfRatings);
-
-              //  console.log('newAverage is...' + newAverage);
-
-                /// TODO reviewAverage isn't being set
-
-               // Recipe.update({_id: newRecipe._id, postersCreationDate: recipe.postersCreationDate}, {$set: {reviewAverage: newAverage}});
-
-
-
-
-/// This stupid thing is finally fucking working
-
-
-
-            /*
-
-            recipe.reviewsOfRecipe.push({
-                wouldMakeAgain: req.body.wouldMakeAgain,
-                howGoodTaste: req.body.howGoodTaste,
-                howEasyToMake: req.body.howEasyToMake,
-                rating: reviewScore,
-                chefsId: votingRecord.chefsId,
-                postersCreationDate: req.decoded.creationDate,
-                postedBy: req.decoded.id,
-                reviewOf: dataObj.reviewOf,
-                chefsCreationDate: dataObj.chefsCreationDate,
-                recipeName: req.params.name
-            });
-
-            recipe.save();
-
-            */
-
-            /*
-
-            let review_ = {
-                wouldMakeAgain: req.body.wouldMakeAgain,
-                howGoodTaste: req.body.howGoodTaste,
-                howEasyToMake: req.body.howEasyToMake,
-                rating: reviewScore,
-                chefsId: votingRecord.chefsId,
-                postersCreationDate: req.decoded.creationDate,
-                postedBy: req.decoded.id,
-                reviewOf: dataObj.reviewOf,
-                chefsCreationDate: dataObj.chefsCreationDate,
-                recipeName: req.params.name
-            };
-
-            Recipe.update({_id: recipe._id, postersCreationDate: recipe.postersCreationDate}, {$push: {reviewsOfRecipe: review_}});
-
-            */
-
-            /*
-
-            Recipe.findOne({_id: recipe._id, postersCreationDate: recipe.postersCreationDate}).then((recipe) => {
-
-                //  this better work
-
-                recipe.reviewedBy.push([String(req.decoded.id), req.decoded.creationDate]);
-
-                recipe.reviewsOfRecipe.push({
-                    wouldMakeAgain: req.body.wouldMakeAgain,
-                    howGoodTaste: req.body.howGoodTaste,
-                    howEasyToMake: req.body.howEasyToMake,
-                    rating: reviewScore,
-                    chefsId: votingRecord.chefsId,
-                    postersCreationDate: req.decoded.creationDate,
-                    postedBy: req.decoded.id,
-                    reviewOf: dataObj.reviewOf,
-                    chefsCreationDate: dataObj.chefsCreationDate,
-                    recipeName: req.params.name
-                });
-
-                if (reviewScore > 3){
-
-                    recipe.likedBy.push([String(req.decoded.id), req.decoded.creationDate]);
-
-                }
-
-                let newAverage =
-
-
+                recipe.calculateAverage();
 
                 recipe.save();
             });
 
-            */
 
 
             /*
-
-            Recipe.update({_id: recipe._id}, {$push: {'reviewsOfRecipe': {
-                wouldMakeAgain: req.body.wouldMakeAgain,
-                howGoodTaste: req.body.howGoodTaste,
-                howEasyToMake: req.body.howEasyToMake,
-                rating: reviewScore,
-                chefsId: votingRecord.chefsId,
-                postersCreationDate: req.decoded.creationDate,
-                postedBy: req.decoded.id,
-                reviewOf: dataObj.reviewOf,
-                chefsCreationDate: dataObj.chefsCreationDate,
-                recipeName: req.params.name
-            }}});
-
-            */
-
-
-
-
-
-
-            /*
-
-            Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate},{$inc: {numberOfRatings: 1, totalAddedRatings: reviewScore}}, {returnNewDocument: true}).then((newRecipe) => {
-
-                let newAverage = Number(newRecipe.totalAddedRatings) / Number(newRecipe.numberOfRatings);
-
-                console.log('newAverage is...' + newAverage);
-
-                /// TODO reviewAverage isn't being set
-
-                newRecipe.update({$set: {reviewAverage: newAverage}});
-
-                recipe.save()
-
-              //  Recipe.update({_id: newRecipe._id, postersCreationDate: recipe.postersCreationDate}, {$set: {reviewAverage: newAverage}});
-
-            });
-
-            */
-
-            //// TODO fix this one
+             // Old approach that works, but takes up resources
 
             User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
@@ -475,10 +305,89 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
             });
 
+            */
+
+            User.where({_id: req.decoded.id, creationDate: req.decoded.creationDate}).update({$push: {usersReviews: {
+                wouldMakeAgain: req.body.wouldMakeAgain,
+                howGoodTaste: req.body.howGoodTaste,
+                howEasyToMake: req.body.howEasyToMake,
+                rating: reviewScore,
+                chefsId: votingRecord.chefsId,
+                postersCreationDate: req.decoded.creationDate,
+                postedBy: req.decoded.id,
+                reviewOf: dataObj.reviewOf,
+                chefsCreationDate: dataObj.chefsCreationDate,
+                recipeName: req.params.name
+
+            }}});
+
+            User.where({_id: req.decoded.id, creationDate: req.decoded.creationDate}).update({$pull: {cookLater: [recipe._id, recipe.creationDate]}});
+
+            if (reviewScore > 3){
+
+                User.where({_id: req.decoded.id, creationDate: req.decoded.creationDate}).update({$push: {usersFavouriteRecipes: [dataObj.reviewOf, dataObj.chefsCreationDate]}});
+
+            }
+
+            
+
             if (reviewScore > 3) {
 
-                //User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersFavouriteRecipes: [dataObj.reviewOf, dataObj.chefsCreationDate]}});
-               // Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate}, {$push: {likedBy: [String(req.decoded.id), req.decoded.creationDate]}});
+                User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({ $inc: { chefKarma: 1 }}).then(() => {
+                    console.log('chefKarma upvoted');
+                });
+
+
+            }
+            else if (reviewScore < 3){
+
+                User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({ $inc: { chefKarma: -1 }}).then(() => {
+                    console.log('chefKarma downvoted');
+                });
+
+            }
+
+
+            /*
+
+
+            User.findOne({_id: recipe.postedBy, creationDate: recipe.postersCreationDate}).then((chef) => {
+
+                console.log('chef is...' + chef);
+
+                if (reviewScore > 3){
+
+                    console.log('chefs karma is upvoted');
+
+                    chef.update({ $inc: {chefKarma: 1}});
+
+                    chef.save();
+
+                }
+
+                else if (reviewScore < 3) {
+
+                    console.log('chefs karma is upvoted');
+
+                    chef.update({ $inc: {chefKarma: -1}});
+
+                    chef.save();
+
+
+                }
+
+            });
+
+            */
+
+            res.send('Its all done?')
+
+
+            /*
+
+            if (reviewScore > 3) {
+
+
                 User.findOneAndUpdate({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}, { $inc: {chefKarma: 1}});
 
             }
@@ -489,85 +398,9 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
             }
 
-
-
-
-
-
-            /*
-
-            User.update({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersReviews: {
-                wouldMakeAgain: req.body.wouldMakeAgain,
-                howGoodTaste: req.body.howGoodTaste,
-                howEasyToMake: req.body.howEasyToMake,
-                rating: reviewScore,
-                chefsId: votingRecord.chefsId,
-                postersCreationDate: req.decoded.creationDate,
-                postedBy: req.decoded.id,
-                reviewOf: dataObj.reviewOf,
-                chefsCreationDate: dataObj.chefsCreationDate,
-                recipeName: req.params.name
-
-            }}});
-
             */
 
 
-            /*
-
-            User.findByIdAndUpdate(req,decoded.id, {$push: {usersReviews: {
-                wouldMakeAgain: req.body.wouldMakeAgain,
-                howGoodTaste: req.body.howGoodTaste,
-                howEasyToMake: req.body.howEasyToMake,
-                rating: reviewScore,
-                chefsId: votingRecord.chefsId,
-                postersCreationDate: req.decoded.creationDate,
-                postedBy: req.decoded.id,
-                reviewOf: dataObj.reviewOf,
-                chefsCreationDate: dataObj.chefsCreationDate,
-                recipeName: req.params.name
-
-            }}});
-
-            */
-
-            /*
-
-            User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersReviews: {
-                wouldMakeAgain: req.body.wouldMakeAgain,
-                howGoodTaste: req.body.howGoodTaste,
-                howEasyToMake: req.body.howEasyToMake,
-                rating: reviewScore,
-                chefsId: votingRecord.chefsId,
-                postersCreationDate: req.decoded.creationDate,
-                postedBy: req.decoded.id,
-                reviewOf: dataObj.reviewOf,
-                chefsCreationDate: dataObj.chefsCreationDate,
-                recipeName: req.params.name
-
-            }}});
-
-            */
-
-            /*
-
-            User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$pull: {cookLater: [recipe._id, recipe.creationDate]}});
-
-            if (reviewScore > 3) {
-
-                User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersFavouriteRecipes: [dataObj.reviewOf, dataObj.chefsCreationDate]}});
-                Recipe.findOneAndUpdate({_id: recipe._id, postersCreationDate: recipe.postersCreationDate}, {$push: {likedBy: [String(req.decoded.id), req.decoded.creationDate]}});
-                User.findOneAndUpdate({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}, { $inc: {chefKarma: 1}});
-
-            }
-
-            else if (reviewScore < 3){
-
-                User.findOneAndUpdate({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}, { $inc: {chefKarma: -1}});
-
-            }
-
-            */
 
         }
         else {
