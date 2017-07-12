@@ -4,6 +4,7 @@
     <list default="true" id="05ce16e8-8225-4a35-bd59-afadb3dab27a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/recipe.js" afterPath="$PROJECT_DIR$/model/recipe.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/user.js" afterPath="$PROJECT_DIR$/model/user.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/recipeRouter.js" afterPath="$PROJECT_DIR$/routes/recipeRouter.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -17,6 +18,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="recipeApp" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file leaf-file-name="recipeRouter.test.js" pinned="false" current-in-tab="false">
@@ -29,11 +33,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="recipeRouter.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="recipeRouter.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="689">
-              <caret line="284" column="56" lean-forward="true" selection-start-line="284" selection-start-column="56" selection-end-line="284" selection-end-column="56" />
+            <state relative-caret-position="460">
+              <caret line="449" column="16" lean-forward="false" selection-start-line="449" selection-start-column="16" selection-end-line="449" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -42,7 +46,7 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="769">
+            <state relative-caret-position="1075">
               <caret line="43" column="18" lean-forward="false" selection-start-line="43" selection-start-column="18" selection-end-line="43" selection-end-column="18" />
               <folding />
             </state>
@@ -52,7 +56,7 @@
       <file leaf-file-name="reviewController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/reviewController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="994">
+            <state relative-caret-position="394">
               <caret line="79" column="57" lean-forward="false" selection-start-line="79" selection-start-column="57" selection-end-line="79" selection-end-column="57" />
               <folding />
             </state>
@@ -82,18 +86,18 @@
       <file leaf-file-name="recipe.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/recipe.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="550">
-              <caret line="67" column="3" lean-forward="false" selection-start-line="67" selection-start-column="3" selection-end-line="67" selection-end-column="3" />
+            <state relative-caret-position="1775">
+              <caret line="71" column="22" lean-forward="false" selection-start-line="71" selection-start-column="22" selection-end-line="71" selection-end-column="22" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="user.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="user.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="112" column="28" lean-forward="true" selection-start-line="112" selection-start-column="28" selection-end-line="112" selection-end-column="28" />
+            <state relative-caret-position="3025">
+              <caret line="121" column="0" lean-forward="false" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -102,7 +106,7 @@
       <file leaf-file-name="review.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/review.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="519">
+            <state relative-caret-position="1875">
               <caret line="75" column="20" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
               <folding />
             </state>
@@ -160,9 +164,9 @@
         <option value="$PROJECT_DIR$/controllers/addReviewController.js" />
         <option value="$PROJECT_DIR$/roughwork/oldAddReviewVer$.js" />
         <option value="$PROJECT_DIR$/controllers/reviewController.js" />
-        <option value="$PROJECT_DIR$/routes/recipeRouter.js" />
-        <option value="$PROJECT_DIR$/model/recipe.js" />
         <option value="$PROJECT_DIR$/model/user.js" />
+        <option value="$PROJECT_DIR$/model/recipe.js" />
+        <option value="$PROJECT_DIR$/routes/recipeRouter.js" />
       </list>
     </option>
   </component>
@@ -204,6 +208,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -288,8 +294,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -446,12 +450,13 @@
       <workItem from="1499701098437" duration="1249000" />
       <workItem from="1499707832465" duration="15132000" />
       <workItem from="1499793242518" duration="3833000" />
-      <workItem from="1499801913067" duration="5782000" />
+      <workItem from="1499801913067" duration="8023000" />
+      <workItem from="1499874176139" duration="1875000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="241080000" />
+    <option name="totallyTimeSpent" value="245196000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -467,15 +472,15 @@
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16234796" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.49603623" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0056625144" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.70328426" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998413" sideWeight="0.50396377" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -798,22 +803,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/review.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="75" column="20" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/reviewController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="994">
-          <caret line="79" column="57" lean-forward="false" selection-start-line="79" selection-start-column="57" selection-end-line="79" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/controllers/authentication.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="725">
@@ -824,32 +813,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="769">
+        <state relative-caret-position="1075">
           <caret line="43" column="18" lean-forward="false" selection-start-line="43" selection-start-column="18" selection-end-line="43" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
+    <entry file="file://$PROJECT_DIR$/model/review.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="689">
-          <caret line="284" column="56" lean-forward="true" selection-start-line="284" selection-start-column="56" selection-end-line="284" selection-end-column="56" />
+        <state relative-caret-position="1875">
+          <caret line="75" column="20" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/recipe.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="67" column="3" lean-forward="false" selection-start-line="67" selection-start-column="3" selection-end-line="67" selection-end-column="3" />
+        <state relative-caret-position="1775">
+          <caret line="71" column="22" lean-forward="false" selection-start-line="71" selection-start-column="22" selection-end-line="71" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="112" column="28" lean-forward="true" selection-start-line="112" selection-start-column="28" selection-end-line="112" selection-end-column="28" />
+        <state relative-caret-position="3025">
+          <caret line="121" column="0" lean-forward="false" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/reviewController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="79" column="57" lean-forward="false" selection-start-line="79" selection-start-column="57" selection-end-line="79" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="449" column="16" lean-forward="false" selection-start-line="449" selection-start-column="16" selection-end-line="449" selection-end-column="16" />
           <folding />
         </state>
       </provider>

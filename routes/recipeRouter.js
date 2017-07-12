@@ -260,7 +260,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 if (reviewScore > 3){
 
-                    recipe.likedBy.push({_id: String(req.decoded.id), creationDate: req.decoded.creationDate});
+                    recipe.likedBy.push({userid: String(req.decoded.id), creationDate: req.decoded.creationDate});
 
                 }
 
@@ -282,7 +282,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     recipeName: req.params.name
                 });
                 if (reviewScore > 3) {
-                    user.usersFavouriteRecipes.push({_id: dataObj.reviewOf, creationDate: dataObj.chefsCreationDate})
+                    user.usersFavouriteRecipes.push({recipeId: dataObj.reviewOf, creationDate: dataObj.chefsCreationDate})
                 }
                 user.update({$pull: {cookLater: {_id: recipe._id, creationDate: recipe.creationDate}}});
                 user.save();
@@ -394,6 +394,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                         };
 
+                        /*
+
                         if (reviewScore < 3 && votingRecord.alreadyUpvoted === true && votingRecord.alreadyDownvoted === false) {
 
                             console.log('dataObj.reviewOf is...' );
@@ -404,9 +406,11 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                             console.log('!!!!!! dataObj.recipeName is ' + dataObj.recipeName);
 
-                            user.usersFavouriteRecipes.pull({_id: recipe._id});
+                            user.usersFavouriteRecipes.pull({recipeId: recipe._id});
 
                         }
+
+                        */
 
 
                         user.save();
@@ -430,14 +434,20 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 // TODO these two don't work
 
 
-               /// User.where({_id: req.decoded.id, creationDate: req.decoded.creationDate}).update({$pull: {usersFavouriteRecipes: {_id: dataObj.reviewOf}}});
+            ////   User.where({_id: req.decoded.id, creationDate: req.decoded.creationDate}).update({$pull: {usersFavouriteRecipes: {recipeId: dataObj.reviewOf}}});
 
+                User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$pull: {usersFavouriteRecipes: {recipeId: dataObj.reviewOf}}}).then(() =>{
+                    console.log('Item removed from usersFavouriteRecipes');
+                });
 
-                Recipe.where({_id: dataObj.reviewOf, chefsCreationDate: dataObj.postersCreationDate}).update({$pull: {likedBy: {_id: req.decoded.id, creationDate: req.decoded.creationDate}}});
+                Recipe.findOneAndUpdate({_id: recipe._id}, {$pull: {likedBy: {userid: req.decoded.id, creationDate: req.decoded.creationDate}}}).then(() => {
 
+                    console.log('recipe._id is...' + recipe._id);
 
+                    console.log('user removed from likedBy');
 
-
+                });
+                
 
             }
 

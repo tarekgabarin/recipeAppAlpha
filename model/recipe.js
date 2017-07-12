@@ -62,10 +62,17 @@ let recipeSchema = new Schema({
     index: true
   },
 
-  likedBy: {
-      type: Array
+  likedBy: [{
 
-  },
+      userid: {
+          type: String
+      },
+
+      creationDate: {
+          type: Number
+      }
+
+  }],
 
   reviewedBy: {
       type: Array

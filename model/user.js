@@ -110,7 +110,17 @@ let User = new Schema({
 
     /// Stick with just submitting the string _id's of the users liked recipes,
     /// maybe have it be nested arrays that are this ['string_id', here would be the recipes creationDate]
-    usersFavouriteRecipes: [],
+    usersFavouriteRecipes: [{
+
+        recipeId: {
+            type: String
+        },
+
+        creationDate: {
+            type: Number
+        }
+
+    }],
 
     creationDate: {
         type: Number,
