@@ -81,12 +81,23 @@ let User = new Schema({
 
     admin: {
         type: Boolean,
-        defualt: false
+        default: false
     },
 
     // submit the string _id's of the users created recipes into this array
     // to search for these, use the users creationDate as an index to optmize query performance
-    usersRecipes: [],
+    usersRecipes: [{
+
+        recipeId: {
+            type: String
+        },
+
+        creationDate: {
+            type: Number
+        }
+
+
+    }],
 
 
     /// Just keeps track of all the recipes the user has cooked, regardless of their score
@@ -101,7 +112,18 @@ let User = new Schema({
     /// The user saves a recipe he or she would later like to cook in this array, when the user reviews it, the
     // recipe is removed from this array
 
-    cookLater: [],
+    cookLater: [{
+
+        recipeId: {
+            type: String
+        },
+
+        creationDate: {
+            type: Number
+        }
+
+
+    }],
 
     //usersRecipes: [{type: Schema.Types.ObjectId, ref: 'Recipe'}],
 

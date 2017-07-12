@@ -104,8 +104,8 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
             console.log('The array that is being inserted into usersRecipe is...' + [recipe._id, req.decoded.creationDate]);
 
-            user.usersRecipes.push([recipe._id, req.decoded.creationDate]);
-
+            user.usersRecipes.push({recipeId: recipe._id, creationDate: req.decoded.creationDate});
+            
             console.log('usersRecipe is now...' + user.usersRecipes);
 
             user.save();
@@ -286,13 +286,13 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 if (reviewScore > 3) {
                     user.usersFavouriteRecipes.push({recipeId: dataObj.reviewOf, creationDate: dataObj.chefsCreationDate})
                 }
-                user.update({$pull: {cookLater: {_id: recipe._id, creationDate: recipe.creationDate}}});
+
+                User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$pull: {cookLater: {recipeId: recipe._id, creationDate: recipe.postersCreationDate}}}).then(() => {
+                    console.log('item removed from cookLater');
+                });
+
                 user.save();
             });
-
-
-
-
 
 
             if (reviewScore > 3) {
@@ -371,7 +371,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
                 for (let i = 0; i < user.usersReviews.length; i++){
 
-                    /// TODO finish this
+
 
                     if (user.usersReviews[i].reviewOf === dataObj.reviewOf){
 
@@ -459,15 +459,21 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
 /// Saving a recipe to cook then review later
 
+// works as intended
+
 router.post('/:category/:name/Saved', authentication.verifyOrdinaryUser, function(req, res, next){
 
     Recipe.findOne({category: req.params.category, name: req.params.name}).then((recipe) => {
 
         User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
-            user.push([recipe._id, recipe.postersCreationDate]);
+            user.cookLater.push({recipeId: recipe._id, creationDate: recipe.postersCreationDate});
+
+           //// user.push([recipe._id, recipe.postersCreationDate]);
 
             user.save();
+
+            res.json(recipe);
 
         });
 
