@@ -334,6 +334,10 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
             };
 
+            
+
+            recipe.update({ $inc: { totalAddedRatings: -reviewScore}});
+
 
 
             recipe.save();
