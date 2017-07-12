@@ -334,13 +334,21 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
             };
 
-            
 
-            recipe.update({ $inc: { totalAddedRatings: -reviewScore}});
+            if (reviewScore < 3 && votingRecord.alreadyUpvoted === true && votingRecord.alreadyDownvoted === false) {
+
+                recipe.update({$inc: {totalAddedRatings: -reviewScore}});
+
+            }
+
+            else if (reviewScore >= 3 && votingRecord.alreadyUpvoted === false && votingRecord.alreadyDownvoted === true) {
+
+                recipe.update({$inc: {totalAddedRatings: reviewScore}});
 
 
+            }
 
-            recipe.save();
+
 
             User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
@@ -383,11 +391,25 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     console.log('chefKarma downvoted');
                 });
 
+                /*
+
+                Recipe.findOneAndUpdate({_id: recipe._id}, { $inc: { totalAddedRatings: -reviewScore}}).then(() => {
+
+                    console.log('totalAddedRatings updated');
+
+                });
+
+
+                */
+
 
 
                 User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$pull: {usersFavouriteRecipes: {recipeId: dataObj.reviewOf}}}).then(() =>{
                     console.log('Item removed from usersFavouriteRecipes');
                 });
+
+
+
 
                 Recipe.findOneAndUpdate({_id: recipe._id}, {$pull: {likedBy: {userid: req.decoded.id, creationDate: req.decoded.creationDate}}}).then(() => {
 
@@ -398,15 +420,16 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 });
 
 
+
+
+
             }
 
-            else if (reviewScore > 3 && votingRecord.alreadyUpvoted === false && votingRecord.alreadyDownvoted === true) {
+            else if (reviewScore >= 3 && votingRecord.alreadyUpvoted === false && votingRecord.alreadyDownvoted === true) {
 
                 User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({ $inc: { chefKarma: 1 }}).then(() => {
                     console.log('chefKarma upvoted');
                 });
-
-
 
 
             }
