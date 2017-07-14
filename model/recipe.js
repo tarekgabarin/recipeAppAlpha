@@ -40,7 +40,12 @@ let recipeSchema = new Schema({
 
   postedBy: {
     type: String,
-    required: true,
+    required: true
+  },
+
+  postersName: {
+      type: String,
+      required: true
   },
 
 

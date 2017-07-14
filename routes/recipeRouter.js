@@ -72,6 +72,8 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
     console.log('the route is running now!');
 
+    console.log('req.decoded.username is...' + req.decoded.username);
+
     //  req.decoded = decoded;
 
 
