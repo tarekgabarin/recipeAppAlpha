@@ -171,9 +171,17 @@ let User = new Schema({
 
     /// an array of sub arrays containing the _id and creation date of all the chefs the user follows
 
-    subscribedTo: {
+    subscribedTo: [{
 
-    }
+        userid: {
+            type: String
+        },
+
+        creationDate: {
+            type: Number
+        }
+
+    }]
 });
 
 User.methods.passwordComparison = function(candidate, callback){

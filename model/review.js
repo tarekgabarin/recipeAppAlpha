@@ -74,6 +74,10 @@ reviewSchema.add({
 
     recipeName: {
         type: String
+    },
+
+    postersName: {
+        type: String
     }
 
 

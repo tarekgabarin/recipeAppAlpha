@@ -105,7 +105,7 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
             console.log('The array that is being inserted into usersRecipe is...' + [recipe._id, req.decoded.creationDate]);
 
             user.usersRecipes.push({recipeId: recipe._id, creationDate: req.decoded.creationDate});
-            
+
             console.log('usersRecipe is now...' + user.usersRecipes);
 
             user.save();
@@ -257,7 +257,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     postedBy: req.decoded.id,
                     reviewOf: dataObj.reviewOf,
                     chefsCreationDate: dataObj.chefsCreationDate,
-                    recipeName: req.params.name
+                    recipeName: req.params.name,
+                    postersName: req.decoded.username
                 });
 
                 if (reviewScore > 3){
@@ -484,68 +485,124 @@ router.post('/:category/:name/Saved', authentication.verifyOrdinaryUser, functio
 
 // Deleting a recipe
 
+// Works :)
+
 router.delete('/:category/:name', authentication.verifyOrdinaryUser, function (req, res, next){
 
-    Recipe.findOne({category: req.params.category, name: req.params.name}).then((recipe) => {
-
-        if (req.decoded.id === recipe.postedBy){
 
 
-            let UsersWhoReviewed = recipe.reviewedBy;
+    let reviewCounter = 0;
 
-            let UsersWhoLiked = recipe.likedBy;
+    let usersCounter = 0;
 
 
-            for (let i = 0; i < UsersWhoLiked.length - 1; i++){
+    let updatePromise = () => {
 
-                User.findOne({_id: UsersWhoLiked[i][0], creationDate: UsersWhoLiked[i][1]}).then((user) => {
+        return new Promise((resolve, reject) => {
 
-                    user.update({$pull: {usersFavouriteRecipes: [recipe._id, recipe.postersCreationDate]}});
 
-                    user.save();
+            Recipe.findOne({category: req.params.category, name: req.params.name}).then((recipe) => {
 
-                });
-            }
 
-            for (let i = 0; i < UsersWhoReviewed.length - 1; i++){
 
-                User.findOne({_id: UsersWhoReviewed[i][0], creationDate: UsersWhoReviewed[1]}).then((user) => {
 
-                    user.update({$pull: {usersReviews: {reviewOf: recipe._id}}});
+                for (let i = 0; i < recipe.reviewsOfRecipe.length; i++) {
 
-                    user.save();
 
-                });
-            }
 
-            User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+                    User.findOneAndUpdate({_id: recipe.reviewsOfRecipe[i].postedBy, creationDate: recipe.reviewsOfRecipe[i].postersCreationDate}, {$set: {usersReviews:
+                        {
+                            recipeName: 'Recipe has been deleted by its chef :(',
+                            wouldMakeAgain: recipe.reviewsOfRecipe[i].wouldMakeAgain,
+                            howGoodTaste: recipe.reviewsOfRecipe[i].howGoodTaste,
+                            howEasyToMake: recipe.reviewsOfRecipe[i].howEasyToMake,
+                            comment: recipe.reviewsOfRecipe[i].comment,
+                            rating: recipe.reviewsOfRecipe[i].rating,
+                            postersCreationDate: recipe.reviewsOfRecipe[i].postersCreationDate,
+                            postedBy: recipe.reviewsOfRecipe[i].postedBy,
+                            chefsCreationDate: recipe.reviewsOfRecipe[i].chefsCreationDate,
 
-                user.update({$pull: {usersRecipes: [recipe._id, recipe.creationDate]}});
+
+
+                        }}}).then(() => {
+
+                        console.log('Review edited');
+
+
+
+                    });
+
+                    reviewCounter += 1;
+
+
+
+
+                }
+
+                for (let i = 0; i < recipe.likedBy.length; i++){
+
+
+
+                    console.log(recipe.likedBy[i]);
+
+
+
+                    User.findOneAndUpdate({_id: recipe.likedBy[i].userid, creationDate: recipe.likedBy[i].creationDate}, {$pull: {usersFavouriteRecipes: {recipeName : req.params.name}}}).then(() =>{
+                        console.log('Item removed from usersFavouriteRecipes');
+
+                    });
+
+                    usersCounter += 1;
+
+
+
+
+                }
+
+
+                console.log('usersCounter is...' + usersCounter);
+
+                console.log('reviewCounter is...' + reviewCounter);
+
+
+                if ((recipe.reviewsOfRecipe.length === reviewCounter) && (recipe.likedBy.length === usersCounter)){
+
+                    resolve(recipe);
+                }
+                else {
+                    reject('Did not update process yet')
+                }
 
 
             });
 
 
 
-        }
-
-
-
-
-    })
-
-
-        .then((recipe) => {
-
-            if (req.decoded.id === recipe.postedBy){
-
-                recipe.remove();
-
-
-            }
-
 
         });
+
+
+
+    };
+
+
+
+
+
+            updatePromise().then((recipe) => {
+
+                if (req.decoded.id === recipe.postedBy) {
+
+                    recipe.remove();
+
+                    res.send('DONE');
+
+
+                }
+
+
+
+            });
 
 
 });

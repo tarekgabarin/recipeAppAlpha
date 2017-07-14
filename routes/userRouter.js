@@ -281,7 +281,6 @@ router.delete('/manage-account/delete', authentication.verifyOrdinaryUser, (req,
                 let usersWhoLiked = recipe.likedBy;
 
 
-
                 for (let i = 0; i < usersWhoReviewed.length - 1; i++){
 
                   User.findOne({_id: usersWhoReviewed[i][0], creationDate: usersWhoReviewed[i][1]}).then((others) => {

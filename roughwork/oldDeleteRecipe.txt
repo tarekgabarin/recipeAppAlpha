@@ -1,0 +1,195 @@
+router.delete('/:category/:name', authentication.verifyOrdinaryUser, function (req, res, next){
+
+    let reviews = [];
+
+    let usersWhoLiked = [];
+
+    let reviewCounter = 0;
+
+    let usersCounter = 0;
+
+
+    let updatePromise = () => {
+
+        return new Promise((resolve, reject) => {
+
+
+            Recipe.findOne({category: req.params.category, name: req.params.name}).then((recipe) => {
+
+                let clone_ = recipe;
+
+                // TODO convert the recipe document's subdocument arrays into proper javascript arrays, probably using map
+
+                for (let i =0; i < clone_.reviewsOfRecipe.length; i++){
+
+                    /// TODO see if these are the correct values
+
+
+                    console.log(typeof(Number(clone_.reviewsOfRecipe[i].postersCreationDate)));
+
+                    console.log(Number(clone_.reviewsOfRecipe[i].postersCreationDate));
+
+                    console.log(typeof(String(clone_.reviewsOfRecipe[i].postedBy)));
+
+                    console.log(String(clone_.reviewsOfRecipe[i].postedBy));
+
+                    console.log(typeof(String(clone_.reviewsOfRecipe[i].recipeName)));
+
+                    console.log(String(clone_.reviewsOfRecipe[i].recipeName));
+
+
+
+                    reviews.push({
+                        postersCreationDate: Number(clone_.reviewsOfRecipe[i].postersCreationDate),
+                        postedBy: String(clone_.reviewsOfRecipe[i].postedBy),
+                        recipeName: String(clone_.reviewsOfRecipe[i].recipeName),
+
+                    });
+
+
+                }
+
+                for (let i = 0; i < clone_.likedBy.length; i++){
+
+                    usersWhoLiked.push({
+                        userid: String(clone_.likedBy[i].userid),
+                        postersCreationDate: Number(clone_.likedBy[i].postersCreationDate)
+
+                    });
+                }
+
+
+
+
+
+                console.log('in Promise, reviews[0].postedBy is...' + reviews[0].postedBy);
+
+                console.log('in Promise, usersWhoLiked[0].userid is... ' + usersWhoLiked[0].userid);
+
+                /// TODO removing from usersFavourites works, now need to edit reviews
+
+                for (let i = 0; i < reviews.length; i++) {
+
+                    console.log(reviews[i]);
+
+                  ///  User.findByIdAndUpdate(reviews[i].postedBy, {$set: {'usersReviews.$.recipeName': "Recipe has been deleted by its chef :("}});
+
+                    User.findOneAndUpdate({_id: reviews[i].postedBy}, {$set: {usersReviews:
+                        {
+                            recipeName: 'Recipe has been deleted by its chef :(',
+                            wouldMakeAgain: reviews[i].wouldMakeAgain,
+                            howGoodTaste: reviews[i].howGoodTaste,
+                            howEasyToMake: reviews[i].howEasyToMake,
+                            comment: reviews[i].comment,
+                            rating: reviews[i].rating,
+                            postersCreationDate: reviews[i].postersCreationDate,
+                            postedBy: reviews[i].postedBy,
+                            chefsCreationDate: reviews[i].chefsCreationDate,
+
+
+
+                        }}}).then(() => {
+
+                        console.log('Review edited');
+
+
+
+                    });
+
+                    reviewCounter += 1;
+
+
+
+
+                }
+
+                for (let i = 0; i < usersWhoLiked.length; i++){
+
+
+                   // User.findByIdAndUpdate(usersWhoLiked[i].userid, {$pull : {usersFavouriteRecipes: {recipeName : req.params.name}}});
+
+                    console.log(usersWhoLiked[i]);
+
+
+
+                    User.findOneAndUpdate({_id: usersWhoLiked[i].userid}, {$pull: {usersFavouriteRecipes: {recipeName : req.params.name}}}).then(() =>{
+                        console.log('Item removed from usersFavouriteRecipes');
+
+                    });
+
+                    usersCounter += 1;
+
+
+
+
+                }
+
+
+                console.log('usersCounter is...' + usersCounter);
+
+                console.log('reviewCounter is...' + reviewCounter);
+
+                console.log('reviews.length is....' + reviews.length);
+
+                console.log('usersWhoLiked.length is...' + usersWhoLiked.length);
+
+
+                if ((reviews !== null && reviews !== undefined && reviews.length === reviewCounter) && (usersWhoLiked !== null && usersWhoLiked !== undefined && usersWhoLiked.length === usersCounter)){
+
+                    resolve(recipe);
+                }
+                else {
+                    reject('Did not update process yet')
+                }
+
+
+            });
+
+
+
+
+        });
+
+
+
+    };
+
+
+
+
+
+            updatePromise().then((recipe) => {
+
+                if (req.decoded.id === recipe.postedBy) {
+
+                    recipe.remove();
+
+                    res.send('DONE');
+
+
+
+
+
+
+
+
+                }
+
+
+
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
