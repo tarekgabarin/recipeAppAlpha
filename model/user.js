@@ -159,15 +159,29 @@ let User = new Schema({
 
     /// anyone who has ever reviewed a dish by thr user
 
-    reviewedBy: {
-        type: Array
-    },
+    reviewedBy: [{
+
+        userid: {
+            type: String
+        },
+
+        creationDate: {
+            type: Number
+        }
+    }],
 
     /// all the people subscribed to the user
 
-    followedBy: {
-        type: Array
-    },
+    followedBy: [{
+
+       userid: {
+           type: String
+       },
+
+        creationDate: {
+           type: Number
+        }
+    }],
 
     /// an array of sub arrays containing the _id and creation date of all the chefs the user follows
 
