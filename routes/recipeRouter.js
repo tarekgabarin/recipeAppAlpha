@@ -260,7 +260,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     reviewOf: dataObj.reviewOf,
                     chefsCreationDate: dataObj.chefsCreationDate,
                     recipeName: req.params.name,
-                    postersName: req.decoded.username
+                    postersName: req.decoded.username,
+                    comment: req.decoded.comment
                 });
 
                 if (reviewScore > 3){
@@ -303,6 +304,12 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({ $inc: { chefKarma: 1 }}).then(() => {
                     console.log('chefKarma upvoted');
                 });
+
+
+                User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({$addToSet: {reviewedBy: [ req.decoded.id, req.decoded.creationDate]}}).then(() => {
+                    console.log('chefs reviewedBy array updated');
+                });
+
 
 
 

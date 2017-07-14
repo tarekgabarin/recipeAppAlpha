@@ -157,18 +157,10 @@ let User = new Schema({
         default: 0
     },
 
-    /// anyone who has ever reviewed a dish by thr user
+    /// anyone who has ever reviewed a dish by the user
 
-    reviewedBy: [{
+    reviewedBy: [],
 
-        userid: {
-            type: String
-        },
-
-        creationDate: {
-            type: Number
-        }
-    }],
 
     /// all the people subscribed to the user
 
