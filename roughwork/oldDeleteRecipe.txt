@@ -193,3 +193,243 @@ router.delete('/:category/:name', authentication.verifyOrdinaryUser, function (r
 
 
 });
+
+
+
+router.delete('/manage-account/delete', authentication.verifyOrdinaryUser, (req, res, next) => {
+
+    /// first delete all the recipes you've made as well as the reviews
+
+    let didUpdateUsers = false;
+
+
+
+    let getUserDoc = () => {
+
+        User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate})
+
+            .then((user) => {
+                return user;
+            });
+
+    };
+
+
+    let getUserDocPromise = () => {
+
+        return new Promise((resolve, reject) => {
+
+            getUserDoc().then((user) => {
+                if (user !== null && user !== undefined){
+                    resolve(user);
+                }
+                else {
+                    reject('user is still undefined or null')
+                }
+            })
+
+        })
+    };
+
+    getUserDocPromise().then((user) => {
+
+
+        let updateUserReviewsAndFavourites = (recipeId, recipeCreationDate) => {
+
+            Recipe.findOne({_id: recipeId, creationDate: recipeCreationDate}).then((recipe) => {
+
+                let usersWhoReviewed = user.reviewedBy;
+
+                for (let i = 0; i < usersWhoReviewed.length - 1; i++){
+
+                  User.findOne({_id: usersWhoReviewed[i][0], creationDate: usersWhoReviewed[i][1]}).then((others) => {
+
+                      others.update({'usersReviews.reviewOf': recipeId}, {
+                          $set: {
+                              'usersReviews.$.recipeName': "Recipe was deleted by its chef :(",
+                          }
+                      });
+
+                      for (let i = 0; i < others.usersFavouriteRecipes.length; i++){
+
+                          if (others.usersFavouriteRecipes[i].recipeId === recipe._id){
+
+
+                              others.usersFavouriteRecipes[i].remove();
+
+                          }
+
+                      }
+
+                      others.save();
+
+                  })
+
+                }
+
+
+
+            })
+
+        };
+
+
+        let recipesInfoArray = user.usersRecipes;
+
+        for (let i = 0; i < recipesInfoArray.length - 1; i++){
+
+            updateUserReviewsAndFavourites(recipesInfoArray[0], recipesInfoArray[1]);
+
+        }
+
+        let followers_ = user.followedBy;
+
+
+        let updateFollowersSubs = (followerId, followerCD) => {
+
+            User.findOne({_id: followerId, creationDate: followerCD}).then((follower) => {
+
+                follower.update({$pull: {subscribedTo: [user._id, user.creationDate]}});
+
+                follower.save();
+
+
+            })
+
+        };
+
+
+        for (let i = 0; i < followers_.length - 1; i++){
+
+          updateFollowersSubs(followers_[0], followers_[1]);
+        }
+
+        })
+
+        .then((user) => {
+
+            Recipe.remove({postedBy: user._id, postersCreationDate: user.creationDate});
+
+        })
+
+        .then((user) => {
+
+            User.findOneAndRemove({_id: user._id, creationDate: user.creationDate});
+
+
+        });
+
+
+
+});
+
+oll export funciton
+
+
+exports.deleteRecipeAndUserData = (name, category, userId) => {
+
+
+    let reviewCounter = 0;
+
+    let usersCounter = 0;
+
+
+    let updatePromise = () => {
+
+        return new Promise((resolve, reject) => {
+
+
+            Recipe.findOne({category: category, name: name}).then((recipe) => {
+
+
+
+
+                for (let i = 0; i < recipe.reviewsOfRecipe.length; i++) {
+
+                    console.log('recipe.reviewsOfRecipe[i].postedBy is...' + recipe.reviewsOfRecipe[i].postedBy);
+
+                    console.log('recipe.reviewsOfRecipe[i].postersCreationDate is....' + recipe.reviewsOfRecipe[i].postersCreationDate);
+
+
+                    User.findOneAndUpdate({_id: recipe.reviewsOfRecipe[i].postedBy, creationDate: recipe.reviewsOfRecipe[i].postersCreationDate, 'usersReviews.reviewOf': String(recipe._id)}, {$set:  {'usersReviews.$.recipeName': 'Recipe was deleted by its chef :('}});
+
+
+                    reviewCounter += 1;
+
+
+
+
+                }
+
+                for (let i = 0; i < recipe.likedBy.length; i++){
+
+
+
+                    console.log(recipe.likedBy[i]);
+
+                    // TODO this also doesn't work properly
+
+
+
+                    User.findOneAndUpdate({_id: recipe.likedBy[i].userid, creationDate: recipe.likedBy[i].creationDate}, {$pull: {usersFavouriteRecipes: {recipeName : name}}}).then(() =>{
+                        console.log('Item removed from usersFavouriteRecipes');
+
+                    });
+
+                    usersCounter += 1;
+
+
+
+
+                }
+
+
+                console.log('usersCounter is...' + usersCounter);
+
+                console.log('reviewCounter is...' + reviewCounter);
+
+
+                if ((recipe.reviewsOfRecipe.length === reviewCounter) && (recipe.likedBy.length === usersCounter)){
+
+                    resolve(recipe);
+                }
+                else {
+                    reject('Did not update process yet')
+                }
+
+
+            });
+
+
+
+
+        });
+
+
+
+    };
+
+
+
+
+
+    updatePromise().then((recipe) => {
+
+        if (userId === recipe.postedBy) {
+
+            recipe.remove();
+
+            res.send('DONE');
+
+
+        }
+
+
+
+    });
+
+
+
+
+
+};

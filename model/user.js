@@ -94,6 +94,10 @@ let User = new Schema({
 
         creationDate: {
             type: Number
+        },
+
+        category: {
+            type: String
         }
 
 

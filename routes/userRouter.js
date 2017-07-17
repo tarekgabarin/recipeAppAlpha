@@ -241,7 +241,6 @@ router.delete('/manage-account/delete', authentication.verifyOrdinaryUser, (req,
     let didUpdateUsers = false;
 
 
-
     let getUserDoc = () => {
 
         User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate})
@@ -271,88 +270,21 @@ router.delete('/manage-account/delete', authentication.verifyOrdinaryUser, (req,
 
     getUserDocPromise().then((user) => {
 
+        let usersWhoReviewed = user.reviewedBy;
 
-        let updateUserReviewsAndFavourites = (recipeId, recipeCreationDate) => {
+        let usersCounter = 0;
 
-            Recipe.findOne({_id: recipeId, creationDate: recipeCreationDate}).then((recipe) => {
+        for (let i = 0; i < usersWhoReviewed.length; i++){
 
-                let usersWhoReviewed = user.reviewedBy;
-
-                let usersWhoLiked = recipe.likedBy;
-
-
-                for (let i = 0; i < usersWhoReviewed.length - 1; i++){
-
-                  User.findOne({_id: usersWhoReviewed[i][0], creationDate: usersWhoReviewed[i][1]}).then((others) => {
-
-                      others.update({'usersReviews.reviewOf': recipeId}, {
-                          $set: {
-                              'usersReviews.$.recipeName': "Recipe was deleted by its chef :(",
-                          }
-                      });
-
-                      others.save();
-
-                  })
-
-                }
-
-                for (let i = 0; i < usersWhoLiked.length - 1; i++){
-
-                    User.update({_id: usersWhoReviewed[i][0], creationDate: usersWhoReviewed[i][1]}, {$pull: {usersFavouriteRecipes: [recipeId, recipeCreationDate]}});
-
-                }
-
-            })
-
-        };
-
-
-        let recipesInfoArray = user.usersRecipes;
-
-        for (let i = 0; i < recipesInfoArray.length - 1; i++){
-
-            updateUserReviewsAndFavourites(recipesInfoArray[0], recipesInfoArray[1]);
+          ///  User.findOneAndUpdate({_id: usersWhoReviewed[i][0], creationDate: usersWhoReviewed[i][0]})
 
         }
 
-        let followers_ = user.followedBy;
 
 
-        let updateFollowersSubs = (followerId, followerCD) => {
-
-            User.findOne({_id: followerId, creationDate: followerCD}).then((follower) => {
-
-                follower.update({$pull: {subscribedTo: [user._id, user.creationDate]}});
-
-                follower.save();
 
 
-            })
-
-        };
-
-
-        for (let i = 0; i < followers_.length - 1; i++){
-
-          updateFollowersSubs(followers_[0], followers_[1]);
-        }
-
-        })
-
-        .then((user) => {
-
-            Recipe.remove({postedBy: user._id, postersCreationDate: user.creationDate});
-
-        })
-
-        .then((user) => {
-
-            User.findOneAndRemove({_id: user._id, creationDate: user.creationDate});
-
-
-        });
-
+    })
 
 
 });
