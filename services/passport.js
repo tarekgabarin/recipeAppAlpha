@@ -80,7 +80,7 @@ let localLogin = new LocalStrategy({usernameField: 'email'}, function(email, pas
 
 
         User.findOne({email: email}).then((user) => {
-            if (!user){
+            if (!user || user.isActive !== true){
                 return done(null, false, {message: "User is not registered"});
             }
             user.passwordComparison(password, function(err, doesMatch){

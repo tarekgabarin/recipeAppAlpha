@@ -81,7 +81,12 @@ let recipeSchema = new Schema({
 
   reviewedBy: {
       type: Array
-  }
+  },
+
+   isActive: {
+      type: Boolean,
+       default: true
+   }
 
 
 });

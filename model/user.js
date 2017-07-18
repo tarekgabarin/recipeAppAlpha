@@ -43,23 +43,10 @@ let User = new Schema({
         default: "Empty"
     },
 
-    /*
-
-    tokens: [{
-
-        access: {
-            type: String,
-            required: true
-        },
-
-        token: {
-            type: String,
-            required: true
-        }
-
-    }],
-
-    */
+    isActive: {
+        type: Boolean,
+        default: true
+    },
 
     profilePic: {
         type: String,

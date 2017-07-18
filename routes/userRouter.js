@@ -130,7 +130,7 @@ router.get('/:username', (req, res, next) => {
 
     /// get data for viewing other users' profile
 
-   User.findOne({username: req.params.username})
+   User.findOne({username: req.params.username, isActive: true})
 
        .then((user) => {
            res.send(user)
@@ -164,7 +164,9 @@ router.get('/:username/reviews', (req, res, next) => {
 
 // To  view that users recipes
 
-router.get(':username/recipes', (req, res, next) => {
+// Works
+
+router.get('/:username/recipes', (req, res, next) => {
 
     // gets data for viewing recipes made by user via their user profile
 
@@ -174,11 +176,20 @@ router.get(':username/recipes', (req, res, next) => {
 
         .then((user) => {
 
-            Recipe.find({_id: user._id, creationDate: user.creationDate}).then((err, recipes) => {
-                if (err) console.log(err);
-                res.send(recipes);
+            console.log('user._id is...' + user._id);
+
+            console.log('user.creationDate is...' + user.creationDate);
+
+            recipeModel = mongoose.model('Recipe');
+
+            recipeModel.find({postedBy: user._id, postersCreationDate: user.creationDate}).then((recipes) => {
+                res.json(recipes);
             });
 
+        })
+
+        .catch((e) => {
+            console.log(e);
         });
 
 });
@@ -234,62 +245,16 @@ router.delete('/myrecipes/:name', authentication.verifyOrdinaryUser, (req, res, 
 
 
 
-router.delete('/manage-account/delete', authentication.verifyOrdinaryUser, (req, res, next) => {
+router.delete('/manage-account/deactivate', authentication.verifyOrdinaryUser, (req, res, next) => {
 
     /// first delete all the recipes you've made as well as the reviews
 
-    let didUpdateUsers = false;
 
-
-    let getUserDoc = () => {
-
-        User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate})
-
-            .then((user) => {
-                return user;
-            });
-
-    };
-
-
-    let getUserDocPromise = () => {
-
-        return new Promise((resolve, reject) => {
-
-            getUserDoc().then((user) => {
-                if (user !== null && user !== undefined){
-                    resolve(user);
-                }
-                else {
-                    reject('user is still undefined or null')
-                }
-            })
-
-        })
-    };
-
-    getUserDocPromise().then((user) => {
-
-        let usersWhoReviewed = user.reviewedBy;
-
-        let usersCounter = 0;
-
-        for (let i = 0; i < usersWhoReviewed.length; i++){
-
-          ///  User.findOneAndUpdate({_id: usersWhoReviewed[i][0], creationDate: usersWhoReviewed[i][0]})
-
-        }
-
-
-
-
-
-    })
 
 
 });
 
-router.get('/:userid/', (req,res, next) => {
+router.get('/:userid', (req,res, next) => {
 
     User.findOne({_id: req.params.userid})
 
@@ -297,8 +262,10 @@ router.get('/:userid/', (req,res, next) => {
 
             if (user !== undefined && user !== null){
 
-                return user;
+                if (user.isActive === true){
 
+                    return user;
+                }
             }
 
         })
@@ -318,13 +285,154 @@ router.post('/login', passport.authenticate('localLogin', {session: false}), (re
 
     console.log("value_.... is" + value_);
 
-   res.header('x-auth', value_).send(value_);
+    res.header('x-auth', value_).send(value_);
 
     console.log(req.user);
 
  ///   res.header('Authorization', generateUserToken(req.user));
 
 });
+
+// This works : )
+
+/// Subscirbes and unsubscribes to another user
+
+router.put('/:userid/subscribe', authentication.verifyOrdinaryUser, (req, res, err) => {
+
+    let alreadySubbed = undefined;
+
+    let creationNum = undefined;
+
+    let getUserPromise = () => {
+
+        return new Promise((resolve, reject) => {
+
+            User.findOne({_id: req.decoded.id, isActive: true, creationDate: req.decoded.creationDate}).then((user) => {
+
+                if (user.subscribedTo.length === 0){
+
+                    alreadySubbed = false;
+                    resolve(user);
+                }
+
+                else {
+
+
+                    for (let i = 0; i < user.subscribedTo.length; i++){
+
+                        console.log('In for loop, user.subscribedTo[i].userid is....' + user.subscribedTo[i].userid);
+
+
+                        if (user.subscribedTo[i].userid === req.params.userid){
+                            alreadySubbed = true;
+                            creationNum = user.subscribedTo[i].creationDate;
+                            console.log('user.subscribedTo[i].creationDate is...' + String(user.subscribedTo[i].creationDate));
+                            res.send('Already subscribed to user');
+                            resolve(user);
+                            break;
+                        }
+                        else {
+                            console.log('user was not in in subscribedTo array');
+                            alreadySubbed = false;
+                            resolve(user);
+                        }
+
+                    }
+
+
+                }
+
+
+
+            })
+
+        })
+
+
+    };
+
+    getUserPromise().then((user) => {
+
+      console.log('In callback, user is...' + user);
+
+      console.log('In callback, user.subscribedTo is...' + user.subscribedTo);
+
+      if (alreadySubbed === false){
+
+          User.findOne({_id: req.params.userid}).then((other) => {
+
+              console.log('other is...' + other);
+
+              user.subscribedTo.push({userid: String(other._id), creationDate: other.creationDate});
+
+              other.followedBy.push({userid: String(user._id), creationDate: user.creationDate});
+
+              user.save();
+
+              other.save();
+
+              res.send('Subscirbed to user');
+
+          })
+
+      }
+      else if (alreadySubbed === true){
+
+          console.log('In callback, creationNum is...' + creationNum);
+
+          User.findOneAndUpdate({_id: user._id, creationDate: user.creationDate}, {$pull: {subscribedTo: {userid: req.params.userid, creationDate: creationNum}}}).then(() => {
+
+              console.log('removed other from your subscribedTo Array');
+          });
+
+          console.log('creationNum is....' + creationNum);
+
+          User.findOneAndUpdate({_id: req.params.userid, creationDate: creationNum}, {$pull: {followedBy: {userid: user._id, creationDate: user.creationDate}}}).then(() => {
+
+              console.log('You were removed from the users followedBy Array');
+          });
+
+          res.send('done');
+
+      }
+
+    })
+
+});
+
+router.get('/subscribed', authentication.verifyOrdinaryUser, (req, res) => {
+
+    console.log('In subscribed, req.decoded.id is....' + req.decoded.id);
+
+    User.findOne({_id: req.decoded.id}).then((user) => {
+
+        console.log('user.subscribedTo is...' + user.subscribedTo);
+
+        res.send(user);
+
+        /*
+
+         for (let i = 0; i < user.subscribedTo.length; i++){
+
+         Recipe.findOne({postedBy: user.subscribedTo[i].userid, postersCreationDate: user.subscribedTo[i].creationDate}).then((recipe) => {
+
+         console.log('running subscribed');
+
+         console.log(recipe);
+
+         res.send(recipe);
+
+         })
+
+         }
+
+         */
+
+    });
+
+
+});
+
 
 
 

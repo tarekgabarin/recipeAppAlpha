@@ -38,21 +38,25 @@ router.get('/', (req, res) => {
 
 /// Get the recipe by category
 
+/// This works
+
 router.get('/:category/', (req, res) => {
 
     // the first page will be zero to avoid unintentionally skipping over first 10
 
     let skip_ = 10 * Number(req.params.page);
 
-    Recipe.find({category: req.params.category}, (err, recipe) => {
+    Recipe.find({category: req.params.category, isActive: true}, (err, recipe) => {
         if (err) res.send(err);
 
-        res.json(recipes)
+        res.json(recipe)
     }).skip(skip_).limit(10);
 
 });
 
 /// Get a specific Recipe, and view it
+
+/// This works
 
 router.get('/:category/:name', (req, res) => {
 
@@ -65,6 +69,18 @@ router.get('/:category/:name', (req, res) => {
     }).lean();
 
 });
+
+// TODO this isn't even working on a basic level
+
+router.get('/test', authentication.verifyOrdinaryUser, (req, res) => {
+
+    console.log('In subscribed, req.decoded.id is....' + req.decoded.id);
+
+    res.send('please work');
+
+});
+
+
 
 /// This works!
 
@@ -92,8 +108,8 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
         category: req.body.category,
         postedBy: req.decoded.id,
         postersCreationDate: req.decoded.creationDate,
-        postersName: req.decoded.username
-
+        postersName: req.decoded.username,
+        isActive: req.decoded.isActive
     }).then((recipe) => {
 
         console.log('Inserting into usersRecipes');
@@ -117,27 +133,6 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
     });
 
-
-
-
-
-    /*
-     let newRecipe = new Recipe({
-     name: req.body.name,
-     description: req.body.description,
-     steps: req.body.steps,
-     ingredients: req.body.ingredients,
-     category: req.body.category,
-     postedBy: req.decoded.id,
-     postersCreationDate: req.decoded.creationDate,
-     postersName: req.decoded.username
-     });
-     newRecipe.save()
-     .then((err, recipe) => {
-     if (err) console.log(err);
-     res.json(recipe);
-     })
-     */
 
 
 
@@ -191,6 +186,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
             console.log("votingRecord is..." + votingRecord);
 
             console.log('req.decoded is...' + req.decoded);
+
+            console.log('req.body.comment is....' + String(req.body.comment));
 
             reviewController.checkThenGetRecipe(dataObj, votingRecord, req.params.name, req.params.category, req.decoded.id).then((recipe) => {
 
@@ -261,7 +258,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     chefsCreationDate: dataObj.chefsCreationDate,
                     recipeName: req.params.name,
                     postersName: req.decoded.username,
-                    comment: req.decoded.comment
+                    comment: String(req.body.comment)
                 });
 
                 if (reviewScore > 3){
@@ -285,7 +282,9 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     postedBy: req.decoded.id,
                     reviewOf: dataObj.reviewOf,
                     chefsCreationDate: dataObj.chefsCreationDate,
-                    recipeName: req.params.name
+                    recipeName: req.params.name,
+                    comment: String(req.body.comment)
+
                 });
                 if (reviewScore > 3) {
                     user.usersFavouriteRecipes.push({recipeId: dataObj.reviewOf, creationDate: dataObj.chefsCreationDate})
@@ -339,7 +338,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 howGoodTaste: req.body.howGoodTaste,
                 howEasyToMake: req.body.howEasyToMake,
                 rating: reviewScore,
-                comment: req.body.comment,
+                comment: String(req.body.comment),
                 postersCreationDate: req.decoded.creationDate,
                 postedBy: req.decoded.id,
                 chefsCreationDate: dataObj.chefsCreationDate,
@@ -392,7 +391,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                             howGoodTaste: req.body.howGoodTaste,
                             howEasyToMake: req.body.howEasyToMake,
                             rating: reviewScore,
-                            comment: req.body.comment,
+                            comment: String(req.body.comment),
                             postersCreationDate: req.decoded.creationDate,
                             postedBy: req.decoded.id,
                             chefsCreationDate: dataObj.chefsCreationDate,
@@ -479,13 +478,17 @@ router.post('/:category/:name/Saved', authentication.verifyOrdinaryUser, functio
 
         User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
-            user.cookLater.push({recipeId: recipe._id, creationDate: recipe.postersCreationDate});
+            if (recipe.isActive === true){
 
-           //// user.push([recipe._id, recipe.postersCreationDate]);
+                user.cookLater.push({recipeId: recipe._id, creationDate: recipe.postersCreationDate});
 
-            user.save();
+                //// user.push([recipe._id, recipe.postersCreationDate]);
 
-            res.json(recipe);
+                user.save();
+
+                res.json(recipe);
+
+            }
 
         });
 
@@ -507,8 +510,7 @@ router.delete('/:category/:name', authentication.verifyOrdinaryUser, function (r
 
 });
 
-// Game plan, for deleting a review, have just the program set the comment to "" and try the user by having angular
-// hide the users who have "" and also
+
 
 
 
