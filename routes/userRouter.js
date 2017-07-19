@@ -11,6 +11,7 @@ const mongodb = require('mongodb');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 mongoose.Promise = Promise;
+const Recipe = require('../model/recipe');
 
 // Keep the function, it's a vital part of the code
 
@@ -400,36 +401,58 @@ router.put('/:userid/subscribe', authentication.verifyOrdinaryUser, (req, res, e
 
 });
 
-router.get('/subscribed', authentication.verifyOrdinaryUser, (req, res) => {
+// Works like a charm :)
+
+router.post('/recommended', authentication.verifyOrdinaryUser, (req, res) => {
 
     console.log('In subscribed, req.decoded.id is....' + req.decoded.id);
 
-    User.findOne({_id: req.decoded.id}).then((user) => {
+    let usersSubs = {
+        subIds: []
+    };
 
-        console.log('user.subscribedTo is...' + user.subscribedTo);
 
-        res.send(user);
+    let getUsersSubs = () => {
 
-        /*
+        return new Promise((resolve, reject) => {
 
-         for (let i = 0; i < user.subscribedTo.length; i++){
+            User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
-         Recipe.findOne({postedBy: user.subscribedTo[i].userid, postersCreationDate: user.subscribedTo[i].creationDate}).then((recipe) => {
 
-         console.log('running subscribed');
+                for (let i = 0; i < user.subscribedTo.length; i++){
 
-         console.log(recipe);
+                    usersSubs.subIds.push(user.subscribedTo[i].userid);
 
-         res.send(recipe);
+                }
 
-         })
+                if (usersSubs.subIds.length !== 0){
+                    console.log('usersSubs.subIds is...' + usersSubs.subIds);
+                    resolve()
 
-         }
+                }
+                else {
+                    reject('usersSubs is an empty array');
+                }
 
-         */
+
+            });
+
+
+        })
+    };
+
+    getUsersSubs().then(() => {
+
+
+        console.log('In getUsersSubs callback, usersSubs.subIds...' + usersSubs.subIds);
+
+        /// console.log('typeof(usersSubs.subIds[0]) is....' + typeof(usersSubs.subIds[0]));
+
+        Recipe.find({postedBy: {$in: usersSubs.subIds}}).then((recipes) => {
+            res.json(recipes);
+        });
 
     });
-
 
 });
 

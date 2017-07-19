@@ -1,0 +1,207 @@
+router.post('/recommended', authentication.verifyOrdinaryUser, (req, res) => {
+
+    console.log('In subscribed, req.decoded.id is....' + req.decoded.id);
+
+    let recipeArr = [];
+
+    let subCounter = 0;
+
+    User.findOne({_id: req.decoded.id}).then((user) => {
+
+        console.log('user.subscribedTo is...' + user.subscribedTo);
+
+
+         for (let i = 0; i < user.subscribedTo.length; i++){
+
+             subCounter = i;
+
+             console.log('subCounter is...' + subCounter);
+
+            User.findOne({_id: user.subscribedTo[i].userid, creationDate: user.subscribedTo[i].creationDate}).then((chef) => {
+
+
+
+                console.log('chef is...' + chef);
+
+                for (let i = 0; i < chef.usersRecipes.length; i++){
+
+                    console.log('subCounter is now...' + subCounter);
+
+                    console.log('recipeArr is now...' + recipeArr);
+
+                    Recipe.find({_id: chef.usersRecipes[i].recipeId, postersCreationDate: chef.usersRecipes[i].creationDate}).then((recipe) => {
+
+                        console.log('recipe is...' + recipe);
+
+                        recipeArr.push(recipe);
+
+                    })
+
+                }
+
+            });
+
+         }
+
+        let subCountPromise = () => {
+
+            return new Promise((resolve, reject) => {
+
+                if (subCounter === user.subscribedTo.length){
+
+                    resolve(recipeArr);
+
+
+                }
+
+                    })
+
+
+        };
+
+        subCountPromise().then(() => {
+
+            console.log('entering callback, recipeArr is now...' + recipeArr);
+
+
+
+          res.json(recipeArr);
+
+
+
+        })
+
+
+
+    });
+
+
+
+
+});
+
+
+/// Other one that is less shitty but don't work
+
+router.post('/recommended', authentication.verifyOrdinaryUser, (req, res) => {
+
+    console.log('In subscribed, req.decoded.id is....' + req.decoded.id);
+
+    let recipeArr = [];
+
+    let subCounter = 0;
+
+    let recipeCounter = 0;
+
+    User.findOne({_id: req.decoded.id}).then((user) => {
+
+        console.log('user.subscribedTo is...' + user.subscribedTo);
+
+        console.log('Within User.findOne.then, subCounter is ' + subCounter);
+
+
+         for (let i = 0; i < user.subscribedTo.length; i++){
+
+             console.log('subCounter is...' + subCounter);
+
+            User.findOne({_id: user.subscribedTo[i].userid, creationDate: user.subscribedTo[i].creationDate}).then((chef) => {
+
+                console.log('chef is...' + chef);
+
+                    for (let l = 0; l < chef.usersRecipes.length; l++){
+
+                        console.log('subCounter is now...' + subCounter);
+
+                        console.log('recipeArr is now...' + recipeArr);
+
+                        let getRecipePromise = () => {
+
+                            return new Promise((resolve, reject) => {
+
+                                if (recipeCounter > chef.usersRecipes.length){
+
+                                    resolve()
+
+                                }
+                            })
+
+                        };
+
+                        Recipe.find({_id: chef.usersRecipes[l].recipeId, postersCreationDate: chef.usersRecipes[l].creationDate}).then((recipe) => {
+
+                            console.log('recipe is...' + recipe);
+
+                            recipeArr.push(recipe);
+
+                            recipeCounter = l;
+
+                            console.log('In Recipe find, recipeCounter is now...' + recipeCounter);
+
+                            console.log('In Recipe find, subCounter is now...' + subCounter);
+
+                            console.log('in Recipe find, i is now...' + i);
+
+                            console.log('in Recipe find, l is now...' + l);
+
+                            console.log('in Recipe find, recipeArr is' + recipeArr);
+
+
+                        });
+
+                        getRecipePromise().then(() => {
+
+                            subCounter = i;
+
+                            recipeCounter = 0;
+
+                            console.log('In getRecipePromise, subCounter is...' + subCounter);
+
+                            console.log('In getRecipePomise, recipeCounter is...' + recipeCounter);
+                        });
+
+                    }
+
+
+
+            });
+
+         }
+
+        let subCountPromise = () => {
+
+             console.log('running subCountPromise');
+
+            return new Promise((resolve, reject) => {
+
+                if (subCounter === user.subscribedTo.length){
+
+                    resolve(recipeArr);
+
+
+                }
+
+                    })
+
+
+        };
+
+        subCountPromise().then(() => {
+
+            console.log('entering callback, recipeArr is now...' + recipeArr);
+
+
+
+          res.json(recipeArr);
+
+
+
+        })
+
+
+
+    });
+
+
+
+
+});
