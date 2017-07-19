@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05ce16e8-8225-4a35-bd59-afadb3dab27a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/review.js" afterPath="$PROJECT_DIR$/model/review.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/recipeRouter.js" afterPath="$PROJECT_DIR$/routes/recipeRouter.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/userRouter.js" afterPath="$PROJECT_DIR$/routes/userRouter.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -24,7 +25,7 @@
       <file leaf-file-name="user.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
+            <state relative-caret-position="-1625">
               <caret line="48" column="6" lean-forward="false" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
               <folding />
             </state>
@@ -34,19 +35,19 @@
       <file leaf-file-name="userRouter.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/userRouter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="403" column="24" lean-forward="false" selection-start-line="403" selection-start-column="24" selection-end-line="403" selection-end-column="24" />
+            <state relative-caret-position="601">
+              <caret line="243" column="0" lean-forward="true" selection-start-line="243" selection-start-column="0" selection-end-line="243" selection-end-column="0" />
               <folding>
-                <element signature="e#6910#9792#0" expanded="false" />
+                <element signature="e#8150#11032#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="oldSub.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="oldSub.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/oldSub.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2115">
+            <state relative-caret-position="-1665">
               <caret line="95" column="37" lean-forward="false" selection-start-line="95" selection-start-column="17" selection-end-line="95" selection-end-column="38" />
               <folding />
             </state>
@@ -56,7 +57,7 @@
       <file leaf-file-name="passport.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/services/passport.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2050">
+            <state relative-caret-position="25">
               <caret line="82" column="47" lean-forward="false" selection-start-line="82" selection-start-column="47" selection-end-line="82" selection-end-column="47" />
               <folding />
             </state>
@@ -66,8 +67,8 @@
       <file leaf-file-name="review.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/review.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1100">
-              <caret line="44" column="19" lean-forward="false" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="19" />
+            <state relative-caret-position="619">
+              <caret line="83" column="22" lean-forward="false" selection-start-line="83" selection-start-column="22" selection-end-line="83" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -76,7 +77,7 @@
       <file leaf-file-name="reviewController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/reviewController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3225">
+            <state relative-caret-position="475">
               <caret line="129" column="0" lean-forward="false" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
               <folding />
             </state>
@@ -93,16 +94,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="recipeRouter.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="recipeRouter.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2325">
-              <caret line="145" column="93" lean-forward="false" selection-start-line="145" selection-start-column="93" selection-end-line="145" selection-end-column="93" />
+            <state relative-caret-position="-8375">
+              <caret line="88" column="34" lean-forward="false" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="34" />
               <folding>
-                <element signature="e#2127#3504#0" expanded="false" />
-                <element signature="e#3679#14063#0" expanded="false" />
-                <element signature="e#14235#14761#0" expanded="false" />
-                <element signature="e#14895#15024#0" expanded="false" />
+                <element signature="e#2219#3596#0" expanded="false" />
+                <element signature="e#14327#14853#0" expanded="false" />
+                <element signature="e#14987#15116#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -156,15 +156,15 @@
         <option value="$PROJECT_DIR$/../roughWorkForCheapEat/newAddReviewRouter.js" />
         <option value="$PROJECT_DIR$/controllers/addReviewController.js" />
         <option value="$PROJECT_DIR$/roughwork/oldAddReviewVer$.js" />
-        <option value="$PROJECT_DIR$/model/review.js" />
         <option value="$PROJECT_DIR$/roughwork/oldDeleteRecipe.txt" />
         <option value="$PROJECT_DIR$/controllers/reviewController.js" />
         <option value="$PROJECT_DIR$/model/user.js" />
         <option value="$PROJECT_DIR$/services/passport.js" />
         <option value="$PROJECT_DIR$/model/recipe.js" />
-        <option value="$PROJECT_DIR$/routes/recipeRouter.js" />
         <option value="$PROJECT_DIR$/oldSub.txt" />
+        <option value="$PROJECT_DIR$/model/review.js" />
         <option value="$PROJECT_DIR$/routes/userRouter.js" />
+        <option value="$PROJECT_DIR$/routes/recipeRouter.js" />
       </list>
     </option>
   </component>
@@ -477,12 +477,12 @@
       <workItem from="1500402338125" duration="1270000" />
       <workItem from="1500404242720" duration="7501000" />
       <workItem from="1500416510088" duration="1200000" />
-      <workItem from="1500482665669" duration="7958000" />
+      <workItem from="1500482665669" duration="12978000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="321030000" />
+    <option name="totallyTimeSpent" value="326050000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -778,10 +778,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/oldSub.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1665">
+          <caret line="95" column="37" lean-forward="false" selection-start-line="95" selection-start-column="17" selection-end-line="95" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/passport.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="82" column="47" lean-forward="false" selection-start-line="82" selection-start-column="47" selection-end-line="82" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/controllers/reviewController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3225">
+        <state relative-caret-position="475">
           <caret line="129" column="0" lean-forward="false" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1625">
+          <caret line="48" column="6" lean-forward="false" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -796,56 +820,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/review.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1100">
-          <caret line="44" column="19" lean-forward="false" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2325">
-          <caret line="145" column="93" lean-forward="false" selection-start-line="145" selection-start-column="93" selection-end-line="145" selection-end-column="93" />
-          <folding>
-            <element signature="e#2127#3504#0" expanded="false" />
-            <element signature="e#3679#14063#0" expanded="false" />
-            <element signature="e#14235#14761#0" expanded="false" />
-            <element signature="e#14895#15024#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/services/passport.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2050">
-          <caret line="82" column="47" lean-forward="false" selection-start-line="82" selection-start-column="47" selection-end-line="82" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/user.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="48" column="6" lean-forward="false" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
+        <state relative-caret-position="619">
+          <caret line="83" column="22" lean-forward="false" selection-start-line="83" selection-start-column="22" selection-end-line="83" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/userRouter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="403" column="24" lean-forward="false" selection-start-line="403" selection-start-column="24" selection-end-line="403" selection-end-column="24" />
+        <state relative-caret-position="601">
+          <caret line="243" column="0" lean-forward="true" selection-start-line="243" selection-start-column="0" selection-end-line="243" selection-end-column="0" />
           <folding>
-            <element signature="e#6910#9792#0" expanded="false" />
+            <element signature="e#8150#11032#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/oldSub.txt">
+    <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2115">
-          <caret line="95" column="37" lean-forward="false" selection-start-line="95" selection-start-column="17" selection-end-line="95" selection-end-column="38" />
-          <folding />
+        <state relative-caret-position="-8375">
+          <caret line="88" column="34" lean-forward="false" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="34" />
+          <folding>
+            <element signature="e#2219#3596#0" expanded="false" />
+            <element signature="e#14327#14853#0" expanded="false" />
+            <element signature="e#14987#15116#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

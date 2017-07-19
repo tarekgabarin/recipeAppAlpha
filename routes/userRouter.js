@@ -245,13 +245,67 @@ router.delete('/myrecipes/:name', authentication.verifyOrdinaryUser, (req, res, 
 });
 
 
+// TODO the last major function test it out
 
 router.delete('/manage-account/deactivate', authentication.verifyOrdinaryUser, (req, res, next) => {
 
+
+    let recipeIdArr = [];
+
+
     /// first delete all the recipes you've made as well as the reviews
 
+    User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+
+        user.set('isActive', false);
+
+        user.save();
+
+        for (let i = 0; i < user.usersRecipes.length; i++){
+
+            Recipe.findOneAndUpdate({_id: user.usersFavouriteRecipes[i].recipeId, creationDate: user.usersFavouriteRecipes[i].creationDate}, {$set: {isActive: false}});
+
+        }
+
+        let makeArrPromise = () => {
+
+            for (let l = 0; l < user.usersReviews.length; l++) {
+
+                recipeIdArr.push(user.usersReviews[i].recipeId);
+
+            }
+
+            if (recipeIdArr.length === user.usersReviews.length){
+                resolve();
+            }
 
 
+        };
+
+        makeArrPromise().then(() => {
+
+            Recipe.find({_id: {$in: recipeIdArr}}).then((recipes) => {
+
+                for (let i = 0; i < recipes.reviewsOfRecipe.length; i++){
+
+                    if (recipes.reviewsOfRecipe[i].postedBy === String(user._id)){
+
+                        recipes.reviewsOfRecipe[i].isActive = false;
+
+                        recipes.save();
+
+                    }
+                }
+
+            })
+
+        });
+
+
+
+
+
+    });
 
 });
 

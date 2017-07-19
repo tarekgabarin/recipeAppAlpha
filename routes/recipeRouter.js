@@ -70,13 +70,28 @@ router.get('/:category/:name', (req, res) => {
 
 });
 
-// TODO this isn't even working on a basic level
+// TODO you need to do this
 
-router.get('/test', authentication.verifyOrdinaryUser, (req, res) => {
+// Returns the top rated recipes.
 
-    console.log('In subscribed, req.decoded.id is....' + req.decoded.id);
+router.get('/top', authentication.verifyOrdinaryUser, (req, res) => {
 
-    res.send('please work');
+    // Use aggregate
+
+    Recipe.aggregate([{$group: {
+
+        _id: "$_id",
+
+        postedBy: '$postedBy',
+
+        name: "$name",
+
+        postersName: "$postersName"
+
+
+    }}])
+
+
 
 });
 

@@ -78,6 +78,11 @@ reviewSchema.add({
 
     postersName: {
         type: String
+    },
+
+    isActive: {
+        type: Boolean,
+        default: true
     }
 
 
