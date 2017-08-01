@@ -87,6 +87,81 @@ router.post('/register', (req, res, next) => {
                     });
                 }
 
+                else if (user){
+
+                    if (user.isActive === false){
+
+                        let data = {
+                            usersReviewedRecipes: undefined,
+                            usersCreatedRecipes: undefined
+                        };
+
+                        user.set('isActive', true);
+
+                        data.usersCreatedRecipes = user.usersRecipes;
+
+                        data.usersReviewedRecipes = user.usersReviews;
+
+                        user.save();
+
+                        let getDataPromise = () => {
+
+                            return new Promise((resolve, reject) => {
+
+                                if (data.usersCreatedRecipes !== undefined && data.usersReviewedRecipes !== undefined){
+                                    resolve();
+                                }
+                                else {
+                                    reject('data stuff is still null');
+                                }
+
+                            })
+
+                        };
+
+                        getDataPromise().then(() => {
+
+                            console.log('running getDataPromise.then callback');
+
+
+                            console.log('Running getUserPromise.then callback');
+
+                            for (let i = 0; i < data.usersCreatedRecipes.length; i++){
+
+                                Recipe.findByIdAndUpdate(data.usersCreatedRecipes[i].recipeId, {$set: {isActive: true}}).then(() => {
+
+                                    console.log('Recipe documents are active again');
+
+                                })
+
+                            }
+
+                            for (let i = 0; i < data.usersReviewedRecipes.length; i++){
+
+                                Recipe.findByIdAndUpdate(data.usersReviewedRecipes[i].reviewOf).then((recipe) => {
+
+                                    for (let l = 0; l < recipe.reviewsOfRecipe.length; l++){
+
+                                        if (recipe.reviewsOfRecipe[l].postersName === req.body.username){
+                                            recipe.reviewsOfRecipe[l].isActive = true;
+                                            recipe.save();
+                                            break;
+                                        }
+                                    }
+
+                                });
+                            }
+
+
+
+
+                        })
+
+                    }
+
+
+                }
+
 
                 else {
 
