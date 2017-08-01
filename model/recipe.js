@@ -88,7 +88,6 @@ let recipeSchema = new Schema({
        default: true
    }
 
-
 });
 
 
@@ -114,7 +113,7 @@ recipeSchema.methods.calculateAverage = function(){
 */
 
 
-
+/*
 
 recipeSchema.virtual('reviewAverage').get(function() {
 
@@ -132,6 +131,8 @@ recipeSchema.virtual('reviewAverage').get(function() {
     }
 
 });
+
+*/
 
 
 

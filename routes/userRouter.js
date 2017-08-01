@@ -245,67 +245,89 @@ router.delete('/myrecipes/:name', authentication.verifyOrdinaryUser, (req, res, 
 });
 
 
-// TODO the last major function test it out
+// Works : )
 
-router.delete('/manage-account/deactivate', authentication.verifyOrdinaryUser, (req, res, next) => {
+router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (req, res, next) => {
 
+    let data = {
+        usersReviewedRecipes: undefined,
+        usersCreatedRecipes: undefined
+    };
 
-    let recipeIdArr = [];
-
-
-    /// first delete all the recipes you've made as well as the reviews
-
-    User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
-
-        user.set('isActive', false);
-
-        user.save();
-
-        for (let i = 0; i < user.usersRecipes.length; i++){
-
-            Recipe.findOneAndUpdate({_id: user.usersFavouriteRecipes[i].recipeId, creationDate: user.usersFavouriteRecipes[i].creationDate}, {$set: {isActive: false}});
-
-        }
-
-        let makeArrPromise = () => {
-
-            for (let l = 0; l < user.usersReviews.length; l++) {
-
-                recipeIdArr.push(user.usersReviews[i].recipeId);
-
-            }
-
-            if (recipeIdArr.length === user.usersReviews.length){
-                resolve();
-            }
+    console.log('req,decoded.id...' + req.decoded.id);
 
 
-        };
 
-        makeArrPromise().then(() => {
+    let getUserPromise = () => {
 
-            Recipe.find({_id: {$in: recipeIdArr}}).then((recipes) => {
+        return new Promise((resolve, reject) => {
 
-                for (let i = 0; i < recipes.reviewsOfRecipe.length; i++){
+            User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
-                    if (recipes.reviewsOfRecipe[i].postedBy === String(user._id)){
+                console.log('user is....' + user);
 
-                        recipes.reviewsOfRecipe[i].isActive = false;
+                user.set('isActive', false);
 
-                        recipes.save();
+                data.usersCreatedRecipes = user.usersRecipes;
 
-                    }
+                data.usersReviewedRecipes = user.usersReviews;
+
+                user.save();
+
+                if (data.usersReviewedRecipes !== undefined && data.usersCreatedRecipes !== undefined){
+
+                    resolve()
+                }
+                else {
+                    console.log('data.usersReviewedRecipes is...' + data.usersReviewedRecipes);
+                    console.log('data.usersCreatedRecipes is...' + data.usersCreatedRecipes);
+                    reject('data stuff is undefined');
                 }
 
-            })
+            });
+
+
 
         });
 
+    };
+
+    getUserPromise().then(() => {
+
+        console.log('Running getUserPromise.then callback');
+
+        for (let i = 0; i < data.usersCreatedRecipes.length; i++){
+
+          Recipe.findByIdAndUpdate(data.usersCreatedRecipes[i].recipeId, {$set: {isActive: false}}).then(() => {
+
+              console.log('Recipe documents are not active anymore');
+
+          })
+
+        }
+
+        for (let i = 0; i < data.usersReviewedRecipes.length; i++){
+
+            Recipe.findByIdAndUpdate(data.usersReviewedRecipes[i].reviewOf).then((recipe) => {
+
+                for (let l = 0; l < recipe.reviewsOfRecipe.length; l++){
+
+                    if (recipe.reviewsOfRecipe[l].postedBy === req.decoded.id){
+                        recipe.reviewsOfRecipe[l].isActive = false;
+                        recipe.save();
+                        break;
+                    }
+                }
+
+            });
+        }
 
 
 
 
     });
+
+
 
 });
 

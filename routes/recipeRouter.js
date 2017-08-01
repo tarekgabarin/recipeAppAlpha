@@ -21,9 +21,8 @@ const reviewController = require('../controllers/reviewController');
 
 const router = express.Router();
 
-// Getting all recipes. Angular already will do pagination for me
 
-router.get('/', (req, res) => {
+router.get('/:page', (req, res) => {
 
     /// the starting req.params.page is 0
     let skip_ = 10 * Number(req.params.page);
@@ -33,14 +32,14 @@ router.get('/', (req, res) => {
         if (err) res.send(err);
 
         res.json(recipes);
-    });
+    }).skip(skip_).limit(10);
 });
 
 /// Get the recipe by category
 
 /// This works
 
-router.get('/:category/', (req, res) => {
+router.get('/:category/page/:page', (req, res) => {
 
     // the first page will be zero to avoid unintentionally skipping over first 10
 
@@ -62,7 +61,7 @@ router.get('/:category/:name', (req, res) => {
 
     /// I assume that you'll get the reviews as well as the recipe with this one
 
-    Recipe.findOne({category: req.params.category, name: req.params.name}, (err, recipe) => {
+    Recipe.findOne({category: req.params.category, name: req.params.name, isActive: true}, (err, recipe) => {
         if (err) res.send(err);
 
         res.json(recipe);
@@ -70,15 +69,21 @@ router.get('/:category/:name', (req, res) => {
 
 });
 
-// TODO you need to do this
 
 // Returns the top rated recipes.
+
+/// I'm gonna first try to do this in the front end, but it does work :)
+
 
 router.get('/top', authentication.verifyOrdinaryUser, (req, res) => {
 
     // Use aggregate
 
-    Recipe.aggregate([{$group: {
+    Recipe.aggregate([
+
+        {$match: {'isActive': true}},
+
+        {$group: {
 
         _id: "$_id",
 
@@ -86,14 +91,30 @@ router.get('/top', authentication.verifyOrdinaryUser, (req, res) => {
 
         name: "$name",
 
-        postersName: "$postersName"
+        postersName: "$postersName",
+
+        category: '$category',
+
+        numberOfRatings: '$numberOfRatings',
+
+        totalAddedRatings: '$totalAddedRatings',
+
+        postersCreationDate: '$postersCreationDate',
+
+        reviewAverage: ['totalAddedRatings', 'numberOfRatings']
+
+        }},
+
+        {$sort: {'reviewAverage': 1}}
 
 
-    }}])
+        ]);
 
 
 
 });
+
+
 
 
 
@@ -281,6 +302,7 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     recipe.likedBy.push({userid: String(req.decoded.id), creationDate: req.decoded.creationDate});
 
                 }
+
 
                 recipe.save();
             });

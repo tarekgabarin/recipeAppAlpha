@@ -205,3 +205,95 @@ router.post('/recommended', authentication.verifyOrdinaryUser, (req, res) => {
 
 
 });
+
+
+//// Old deactivate account
+
+
+router.put('/manage-account/deactivate', authentication.verifyOrdinaryUser, (req, res, next) => {
+
+
+    let recipeIdArr = [];
+
+
+    /// first delete all the recipes you've made as well as the reviews
+
+    User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+
+        console.log('user is....' + user);
+
+        user.set('isActive', false);
+
+        user.save();
+
+        console.log('user document updated');
+
+        for (let i = 0; i < user.usersRecipes.length; i++){
+
+            console.log('user.usersFavouriteRecipes[i].recipeId: ' + user.usersFavouriteRecipes[i].recipeId);
+
+            console.log('user.usersFavouriteRecipes[i].creationDate: ' + user.usersFavouriteRecipes[i].creationDate);
+
+            Recipe.findOneAndUpdate({_id: user.usersFavouriteRecipes[i].recipeId, creationDate: user.usersFavouriteRecipes[i].creationDate}, {$set: {isActive: false}}).then(() => {
+                    console.log('Recipe updated!');
+                })
+
+        }
+
+        let makeArrPromise = () => {
+
+            for (let l = 0; l < user.usersReviews.length; l++) {
+
+                recipeIdArr.push(user.usersReviews[i].recipeId);
+
+            }
+
+            console.log('recipeIdArr is...' + recipeIdArr);
+
+            console.log('recipeIdArr.length is...' + recipeIdArr);
+
+            console.log('user.usersReviews.length is....' + user.usersReviews.length);
+
+            if (recipeIdArr.length === user.usersReviews.length){
+                resolve();
+            }
+
+
+        };
+
+        makeArrPromise().then(() => {
+
+            Recipe.find({_id: {$in: recipeIdArr}}).then((recipes) => {
+
+                for (let i = 0; i < recipes.reviewsOfRecipe.length; i++){
+
+                    console.log('recipes.reviewsOfRecipe[i].postedBy is...' + recipes.reviewsOfRecipe[i].postedBy);
+
+                    console.log('user._id...' + user._id);
+
+                    if (recipes.reviewsOfRecipe[i].postedBy === String(user._id)){
+
+                        recipes.reviewsOfRecipe[i].isActive = false;
+
+                        console.log('recipes.reviewsOfRecipe[i].isActive is now....' + recipes.reviewsOfRecipe[i].isActive);
+
+                        recipes.save();
+
+                    }
+                }
+
+            })
+
+        });
+
+
+
+        res.send(user);
+
+
+
+
+
+    });
+
+});
