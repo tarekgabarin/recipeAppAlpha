@@ -21,6 +21,8 @@ const reviewController = require('../controllers/reviewController');
 
 const router = express.Router();
 
+// Works
+
 
 router.get('/:page', (req, res) => {
 
@@ -33,23 +35,30 @@ router.get('/:page', (req, res) => {
 
         res.json(recipes);
     }).skip(skip_).limit(10);
+
 });
 
 /// Get the recipe by category
 
-/// This works
+// Works
 
-router.get('/:category/page/:page', (req, res) => {
+
+
+router.get('/category/:category/:page', (req, res) => {
 
     // the first page will be zero to avoid unintentionally skipping over first 10
 
-    let skip_ = 10 * Number(req.params.page);
+   let skip_ = 10 * Number(req.params.page);
 
-    Recipe.find({category: req.params.category, isActive: true}, (err, recipe) => {
+
+
+    Recipe.find({category: String(req.params.category), isActive: true}, (err, recipe) => {
         if (err) res.send(err);
 
         res.json(recipe)
     }).skip(skip_).limit(10);
+
+
 
 });
 
@@ -60,6 +69,8 @@ router.get('/:category/page/:page', (req, res) => {
 router.get('/:category/:name', (req, res) => {
 
     /// I assume that you'll get the reviews as well as the recipe with this one
+
+
 
     Recipe.findOne({category: req.params.category, name: req.params.name, isActive: true}, (err, recipe) => {
         if (err) res.send(err);
@@ -108,7 +119,7 @@ router.get('/top', authentication.verifyOrdinaryUser, (req, res) => {
         {$sort: {'reviewAverage': 1}}
 
 
-        ]);
+        ]).skip(skip_).limit(10);
 
 
 

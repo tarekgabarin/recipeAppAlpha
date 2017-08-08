@@ -27,6 +27,8 @@ function generateUserToken(user){
 
 // To register a new user
 
+// Works
+
 router.post('/register', (req, res, next) => {
 
 
@@ -180,6 +182,8 @@ router.post('/register', (req, res, next) => {
 
 /// To view your own profile
 
+// Works
+
 router.get('/myprofile', authentication.verifyOrdinaryUser, (req, res, next) => {
 
     User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate})
@@ -202,6 +206,8 @@ router.get('/myprofile', authentication.verifyOrdinaryUser, (req, res, next) => 
 
 /// To view another users profile
 
+// works
+
 router.get('/:username', (req, res, next) => {
 
     /// get data for viewing other users' profile
@@ -220,6 +226,8 @@ router.get('/:username', (req, res, next) => {
 });
 
 // To view that users reviews
+
+// Works
 
 router.get('/:username/reviews', (req, res, next) => {
 
@@ -270,54 +278,9 @@ router.get('/:username/recipes', (req, res, next) => {
 
 });
 
-// To view your own review history
-
-router.get('/review-history/', authentication.verifyOrdinaryUser, (req, res, next) => {
-
-
-    // for viewing your own review history
-
-    // fuck pagination through express, Angular will take care of it for you
-
-
-    User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate})
-
-        .then((user) => {
-
-            res.send(user.usersReviews);
-
-        })
-
-        .catch((err) => {
-            console.log(err);
-        });
-
-
-});
-
-// To view your own recipes
-
-router.delete('/myrecipes/:name', authentication.verifyOrdinaryUser, (req, res, next) => {
-
-    /// this is for deleting a recipe
-
-    Recipe
-
-        .findOneAndRemove({name: req.params.name, creationDate: req.decoded.creationDate})
-
-        .then((recipe) => {
-
-            res.json(recipe + 'was succesfully deleted!');
-
-        })
-
-        .catch((err) => {
-            console.log(err);
-        });
 
 
 
-});
 
 
 // Works : )
@@ -406,17 +369,23 @@ router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (re
 
 });
 
-router.get('/:userid', (req,res, next) => {
+// Works
+
+router.get('/:username', (req,res, next) => {
+
+    /*
 
     User.findOne({_id: req.params.userid})
 
         .then((user) => {
 
+            console.log(user);
+
             if (user !== undefined && user !== null){
 
                 if (user.isActive === true){
 
-                    return user;
+                    res.json(user)
                 }
             }
 
@@ -426,8 +395,21 @@ router.get('/:userid', (req,res, next) => {
             console.log(err);
         })
 
+        */
+
+    User.findOne({_id: req.params.username, isActive: true})
+
+        .then((user) => {
+            res.json(user);
+        })
+
+        .catch((e) => {
+            console.log(e);
+        });
+
 });
 
+// Works
 
 router.post('/login', passport.authenticate('localLogin', {session: false}), (req, res, err) => {
 
@@ -607,17 +589,5 @@ router.post('/recommended', authentication.verifyOrdinaryUser, (req, res) => {
 
 });
 
-
-
-
-// router.post('/login')
-
-/*
-router.post('/login', passport.authenticate('local', {successRedirect: '/', failureRedirect: 'users/login', failureFlash: true}),
-(req, res) => {
-  res.redirect('/')
-});
-
-*/
 
 module.exports = router;
