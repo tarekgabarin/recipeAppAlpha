@@ -83,6 +83,11 @@ reviewSchema.add({
     isActive: {
         type: Boolean,
         default: true
+    },
+
+    postedAt: {
+        type: String,
+        default: new Date()
     }
 
 

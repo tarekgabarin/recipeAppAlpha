@@ -305,7 +305,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     chefsCreationDate: dataObj.chefsCreationDate,
                     recipeName: req.params.name,
                     postersName: req.decoded.username,
-                    comment: String(req.body.comment)
+                    comment: String(req.body.comment),
+                    postedAt: new Date()
                 });
 
                 if (reviewScore > 3){
@@ -413,90 +414,155 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 console.log('dataObj.newScore is...' + dataObj.newScore);
             }
 
-            console.log('outside the if statements, dataObj.newScore is....' + dataObj.newScore);
-
-            let newTotal = Number(recipe.totalAddedRatings) + dataObj.newScore;
-
-            console.log('newTotal is...' + newTotal);
-
-            recipe.set('totalAddedRatings', newTotal);
-
-
-            recipe.save();
+           if (reviewScore < dataObj.originalRating || reviewScore > dataObj.originalRating) {
 
 
 
-            User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+               console.log('outside the if statements, dataObj.newScore is....' + dataObj.newScore);
 
-                for (let i = 0; i < user.usersReviews.length; i++){
+               let newTotal = Number(recipe.totalAddedRatings) + dataObj.newScore;
 
+               console.log('newTotal is...' + newTotal);
 
-
-                    if (user.usersReviews[i].reviewOf === dataObj.reviewOf){
-
-                        user.usersReviews[i] = {
-                            wouldMakeAgain: req.body.wouldMakeAgain,
-                            howGoodTaste: req.body.howGoodTaste,
-                            howEasyToMake: req.body.howEasyToMake,
-                            rating: reviewScore,
-                            comment: String(req.body.comment),
-                            postersCreationDate: req.decoded.creationDate,
-                            postedBy: req.decoded.id,
-                            chefsCreationDate: dataObj.chefsCreationDate,
-                            chefsId: dataObj.chefsId,
-                            reviewOf: dataObj.reviewOf
-
-                        };
+               recipe.set('totalAddedRatings', newTotal);
 
 
-                        user.save();
-
-
-                    }
-
-                }
-
-
-            });
+               recipe.save();
 
 
 
-            if (reviewScore < 3 && votingRecord.alreadyUpvoted === true && votingRecord.alreadyDownvoted === false) {
+               User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
-                User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({ $inc: { chefKarma: -1 }}).then(() => {
-                    console.log('chefKarma downvoted');
-                });
-
-
-                User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$pull: {usersFavouriteRecipes: {recipeId: dataObj.reviewOf}}}).then(() =>{
-                    console.log('Item removed from usersFavouriteRecipes');
-                });
+                   for (let i = 0; i < user.usersReviews.length; i++){
 
 
 
+                       if (user.usersReviews[i].reviewOf === dataObj.reviewOf){
 
-                Recipe.findOneAndUpdate({_id: recipe._id}, {$pull: {likedBy: {userid: req.decoded.id, creationDate: req.decoded.creationDate}}}).then(() => {
+                           user.usersReviews[i] = {
+                               wouldMakeAgain: req.body.wouldMakeAgain,
+                               howGoodTaste: req.body.howGoodTaste,
+                               howEasyToMake: req.body.howEasyToMake,
+                               rating: reviewScore,
+                               comment: String(req.body.comment),
+                               postersCreationDate: req.decoded.creationDate,
+                               postedBy: req.decoded.id,
+                               chefsCreationDate: dataObj.chefsCreationDate,
+                               chefsId: dataObj.chefsId,
+                               reviewOf: dataObj.reviewOf
 
-                    console.log('recipe._id is...' + recipe._id);
+                           };
 
-                    console.log('user removed from likedBy');
 
-                });
+                           user.save();
+
+
+                       }
+
+                   }
+
+
+               });
+
+
+
+               if (reviewScore < 3 && votingRecord.alreadyUpvoted === true && votingRecord.alreadyDownvoted === false) {
+
+                   User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({ $inc: { chefKarma: -1 }}).then(() => {
+                       console.log('chefKarma downvoted');
+                   });
+
+
+                   User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$pull: {usersFavouriteRecipes: {recipeId: dataObj.reviewOf}}}).then(() =>{
+                       console.log('Item removed from usersFavouriteRecipes');
+                   });
 
 
 
 
+                   Recipe.findOneAndUpdate({_id: recipe._id}, {$pull: {likedBy: {userid: req.decoded.id, creationDate: req.decoded.creationDate}}}).then(() => {
 
-            }
+                       console.log('recipe._id is...' + recipe._id);
 
-            else if (reviewScore > 3 && votingRecord.alreadyUpvoted === false && votingRecord.alreadyDownvoted === true) {
+                       console.log('user removed from likedBy');
 
-                User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({ $inc: { chefKarma: 1 }}).then(() => {
-                    console.log('chefKarma upvoted');
-                });
+                   });
 
 
-            }
+
+
+
+
+
+
+               }
+
+               else if (reviewScore > 3 && votingRecord.alreadyUpvoted === false && votingRecord.alreadyDownvoted === true) {
+
+                   User.where({_id: dataObj.chefsId, creationDate: dataObj.chefsCreationDate}).update({ $inc: { chefKarma: 1 }}).then(() => {
+                       console.log('chefKarma upvoted');
+                   });
+
+
+               }
+
+
+
+
+           }
+
+        else if (reviewScore === dataObj.originalRating){
+
+
+               User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+
+                   for (let i = 0; i < user.usersReviews.length; i++){
+
+
+
+                       if (user.usersReviews[i].reviewOf === dataObj.reviewOf){
+
+                           user.usersReviews[i] = {
+                               wouldMakeAgain: user.usersReviews[i].wouldMakeAgain,
+                               howGoodTaste: user.usersReviews[i].howGoodTaste,
+                               howEasyToMake: user.usersReviews[i].howEasyToMake,
+                               rating: reviewScore,
+                               comment: String(req.body.comment),
+                               postersCreationDate: req.decoded.creationDate,
+                               postedBy: req.decoded.id,
+                               chefsCreationDate: dataObj.chefsCreationDate,
+                               chefsId: dataObj.chefsId,
+                               reviewOf: dataObj.reviewOf,
+                               recipeName: dataObj.recipeName
+
+                           };
+
+
+                           user.save();
+
+
+                       }
+
+                   }
+
+
+               });
+
+               for (let l = 0; l < recipe.reviewsOfRecipe.length; l++){
+
+                   if (recipe.reviewsOfRecipe[l].postedBy === req.decoded.id){
+
+                       recipe.reviewsOfRecipe[l].comment = String(req.body.comment);
+
+                       recipe.save();
+
+                   }
+
+               }
+
+
+           }
+
 
 
 
@@ -555,6 +621,149 @@ router.delete('/:category/:name', authentication.verifyOrdinaryUser, function (r
     reviewController.deleteRecipeAndUserData(req.params.name, req.params.category, req.decoded.id);
 
     res.send('DONE');
+
+});
+
+/// Possibly useless route?
+
+router.post('/:category/:name/deleteReview', authentication.verifyOrdinaryUser, function(req, res, next){
+
+    Recipe.findOne({category: req.params.category, name: req.params.name}).then((recipe) => {
+
+        let reviewsRating = undefined;
+
+        let chefId = recipe.postedBy;
+
+        let chefCD = recipe.postersCreationDate;
+
+        let gotChefInfo = () => {
+
+            return new Promise((resolve, reject) => {
+
+                if (reviewsRating !== undefined && chefId !== undefined && chefCD !== undefined){
+
+                    resolve(reviewsRating)
+
+                }
+                else {
+                    reject('Stuff is undefined')
+                }
+
+            })
+
+        };
+
+        for (let i = 0; i < recipe.reviewsOfRecipe.length; i++) {
+
+            if (recipe.reviewsOfRecipe[i].postedBy === req.decoded.id) {
+
+                reviewsRating = recipe.reviewsOfRecipe[i].rating;
+
+                recipe.reviewsOfRecipe.splice(i, 1);
+
+                break;
+
+
+            }
+        }
+
+
+
+
+
+                User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+
+                    for (let l = 0; l < user.usersReviews.length; l++){
+
+                        if (user.usersReviews[l].recipeName === req.params.name){
+
+                            user.usersReviews.splice(l, 1);
+
+                            break;
+
+                        }
+
+                    }
+
+                    gotChefInfo().then((reviewsRating) => {
+
+                        let newNumOfReviews = recipe.numberOfRatings - 1;
+
+                        console.log("newNumOfReviews is..." + newNumOfReviews);
+
+                        recipe.set('numberOfRatings', newNumOfReviews);
+
+                        let newTotalAddedRatings = recipe.totalAddedRatings - reviewsRating;
+
+                        console.log('newTotalAddedRatings is...' + newTotalAddedRatings);
+
+                        recipe.set('totalAddedRatings', newTotalAddedRatings);
+
+                        recipe.save();
+
+                        console.log('within callback, reviewsRating is...' + reviewsRating);
+
+                        console.log('within callback, chefId is...' + chefId);
+
+                        console.log('within callback, chefCD is....' + chefCD);
+
+                        if (reviewsRating < 3){
+
+                            User.where({_id: chefId, creationDate: chefCD}).update({$inc: {chefKarma: 1}}).then(() => {
+                                console.log('ChefKarma Updated!')
+                            });
+
+                        }
+
+                        else if (reviewsRating > 3){
+
+                            User.where({_id: chefId, creationDate: chefCD}).update({$inc: {chefKarma: -1}}).then(() => {
+                                console.log('ChefKarma Updated!')
+                            });
+
+
+                            for (let i = 0; i < user.usersFavouriteRecipes.length; i++){
+
+                                if (user.usersFavouriteRecipes[i].recipeId === String(recipe._id)){
+
+                                    console.log('Inside if statment of if (user.usersFavourite === recipeId thing)');
+
+                                    console.log('in the for loop that removes userFavourite, recipe._id is...' + recipe._id);
+
+                                    user.usersFavouriteRecipes.splice(i, 1);
+
+                                    break;
+
+
+                                }
+
+                            }
+
+
+
+                        }
+
+
+
+
+
+
+                    });
+
+
+
+                    user.save();
+
+                });
+
+
+
+
+
+        res.json(recipe);
+
+    })
+
 
 });
 

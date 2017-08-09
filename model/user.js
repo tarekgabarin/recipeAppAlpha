@@ -137,7 +137,7 @@ let User = new Schema({
 
     creationDate: {
         type: Number,
-        default: new Date().getMonth(),
+        default: Math.floor(Math.random() * 11),
         index: true
     },
 
