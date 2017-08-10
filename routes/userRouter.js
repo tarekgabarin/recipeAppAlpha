@@ -20,7 +20,7 @@ function generateUserToken(user){
 
     return jwt.sign({id: user._id, creationDate: user.creationDate, username: user.username}, config.secretKey);
 
-    /// return jwt.encode({sub: user._id, iat: timeStamp}, config.secretKey); this for the simple version
+
 
 }
 
@@ -32,20 +32,6 @@ function generateUserToken(user){
 router.post('/register', (req, res, next) => {
 
 
-        // I guess I will have to use this, and set this to true or false within findOne
-
-    /*
-        function generateUserToken(user){
-
-            return jwt.sign({sub: user._id, creationDate: user.creationDate}, config.secretKey);
-
-            // return jwt.sign(user._id, config.secretKey);
-
-           /// return jwt.encode({sub: user._id, iat: timeStamp}, config.secretKey); this for the simple version
-
-        }
-
-        */
 
         if (!req.body.email || !req.body.password) {
             return res.status(442).send({error: 'Make sure that you entered your email and password'});
@@ -74,12 +60,6 @@ router.post('/register', (req, res, next) => {
 
                                 let value_ = generateUserToken(user);
 
-                                /*
-                                res.json({token: value_});
-
-                                res.set('x-auth', value_);
-
-                                */
 
                                 res.header('x-auth', value_).send(value_);
 
@@ -377,29 +357,6 @@ router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (re
 
 router.get('/:username', (req,res, next) => {
 
-    /*
-
-    User.findOne({_id: req.params.userid})
-
-        .then((user) => {
-
-            console.log(user);
-
-            if (user !== undefined && user !== null){
-
-                if (user.isActive === true){
-
-                    res.json(user)
-                }
-            }
-
-        })
-
-        .catch((err) => {
-            console.log(err);
-        })
-
-        */
 
     User.findOne({_id: req.params.username, isActive: true})
 
@@ -427,7 +384,7 @@ router.post('/login', passport.authenticate('localLogin', {session: false}), (re
 
     console.log(req.user);
 
- ///   res.header('Authorization', generateUserToken(req.user));
+
 
 });
 
@@ -499,7 +456,7 @@ router.put('/:userid/subscribe', authentication.verifyOrdinaryUser, (req, res, e
 
           User.findOne({_id: req.params.userid}).then((other) => {
 
-              console.log('other is...' + other);
+
 
               user.subscribedTo.push({userid: String(other._id), creationDate: other.creationDate});
 
@@ -579,11 +536,6 @@ router.post('/recommended', authentication.verifyOrdinaryUser, (req, res) => {
     };
 
     getUsersSubs().then(() => {
-
-
-        console.log('In getUsersSubs callback, usersSubs.subIds...' + usersSubs.subIds);
-
-        /// console.log('typeof(usersSubs.subIds[0]) is....' + typeof(usersSubs.subIds[0]));
 
         Recipe.find({postedBy: {$in: usersSubs.subIds}}).then((recipes) => {
             res.json(recipes);

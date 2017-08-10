@@ -97,51 +97,6 @@ let recipeSchema = new Schema({
 
 
 
-/*
-recipeSchema.methods.calculateAverage = function(){
-
-  let recipe = this;
-
-  if (recipe.numberOfRatings === 0  && recipe.totalAddedRatings === 0){
-    recipe.reviewAverage = 0;
-  }
-  else {
-
-
-    recipe.reviewAverage = recipe.totalAddedRatings / recipe.numberOfRatings
-
-
-  }
-
-
-};
-*/
-
-
-/*
-
-recipeSchema.virtual('reviewAverage').get(function() {
-
-  let recipe =  this;
-
-    if (recipe.numberOfRatings === 0  && recipe.totalAddedRatings === 0){
-        recipe.reviewAverage = 0;
-    }
-    else {
-
-
-        recipe.reviewAverage = recipe.totalAddedRatings / recipe.numberOfRatings
-
-
-    }
-
-});
-
-*/
-
-
-
-
 
 
 

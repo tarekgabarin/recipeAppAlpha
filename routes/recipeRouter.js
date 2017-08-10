@@ -137,7 +137,6 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
     console.log('req.decoded.username is...' + req.decoded.username);
 
-    //  req.decoded = decoded;
 
 
     console.log('is decoded working....' + req.decoded.id);
@@ -161,9 +160,6 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
         console.log('Inserting into usersRecipes');
 
-        //This didn't work
-
-        /// User.findOneAndUpdate({_id: req.decoded.id, creationDate: req.decoded.creationDate}, {$push: {usersRecipes: [recipe._id, req.decoded.creationDate]}});
 
         User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 

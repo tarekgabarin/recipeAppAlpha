@@ -192,57 +192,7 @@ User.methods.passwordComparison = function(candidate, callback){
     })
 };
 
-/*
 
-
-User.methods.toJSON = function(){
-
-  let account = this;
-
-  let userObj = account.toObject();
-
-  return _.pick(userObj, [ '_id', 'name', 'username', 'email', 'usersReviews', 'usersFavouriteRecipes', 'usersRecipes', 'profilePic', 'chefKarma']);
-
-}
-
-User.methods.generateAuthToken = function(){
-
-  let user = this;
-
-  let passNum = String(this.username).charCodeAt(0);
-
-  let luckyNum = String((Number(passNum) * 769) + 'TLL')
-
-    // --->
-    // Maybe I shouldn't use this because the salty thing shouldn't change and uuidV4 generates random shit
-    let salty = bcrypt.genSalt(10, function(err, salt){
-      bcrypt.hash(luckyNum, salt, function(err, hash){
-          if (err) throw err;
-          return hash
-      })
-  })();
-    //// var hash = SHA256(userid).toString();
-
-    let access ='auth';
-    let token = jwt.sign({_id: user._id.toHexString(), access}, salty).toString();
-    user.token.push({access, token});
-    user.save().then(() => {
-      return token;
-    });
-
-}
-
-
-User.methods.authenticateToke = function(token){
-
-
-
-
-
-
-}
-
-*/
 
 
 let options = ({missingPasswordError: "Incorrect password, try again"});
