@@ -8,6 +8,9 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
+  "engines": {
+    "node": "v6.10.0"
+  },
   "author": "Tarek Gabarin",
   "license": "ISC",
   "dependencies": {
