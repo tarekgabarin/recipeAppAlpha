@@ -157,7 +157,9 @@ router.post('/register', (req, res, next) => {
 
 
 
-                        })
+                        });
+
+                        res.send('Account reactivated!');
 
                     }
 
@@ -359,6 +361,8 @@ router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (re
 
             });
         }
+
+        res.send('Account deactivated');
 
 
 

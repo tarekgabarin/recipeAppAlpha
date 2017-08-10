@@ -137,7 +137,11 @@ let User = new Schema({
 
     creationDate: {
         type: Number,
-        default: Math.floor(Math.random() * 11),
+        default: function(){
+
+            return Math.floor(Math.random() * 11);
+
+        },
         index: true
     },
 
