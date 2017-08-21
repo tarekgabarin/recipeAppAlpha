@@ -88,6 +88,11 @@ reviewSchema.add({
     postedAt: {
         type: String,
         default: new Date()
+    },
+
+    profilePic: {
+        type: String,
+        default: 'BLANK'
     }
 
 

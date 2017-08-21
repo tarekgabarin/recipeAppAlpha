@@ -16,10 +16,51 @@ const reviewController = require('../controllers/reviewController');
 
 
 
+
+
 ///
 /// use this to view the recipes by page
 
 const router = express.Router();
+
+
+const AWS = require('aws-sdk');
+
+const fs = require('fs');
+
+
+const multer = require('multer');
+
+const multerS3 = require('multer-s3');
+
+const accessKeyId =  process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_KEY;
+
+AWS.config.update({
+
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey,
+    region: "ca-central-1"
+
+});
+
+s3 = new AWS.S3();
+
+const upload = multer({
+
+    storage: multerS3({
+
+        s3: s3,
+
+        bucket: "deelishapp",
+
+        key: function (req, file, cb) {
+            console.log(file);
+            cb(null, Date.now().toString()); //use Date.now() for unique file keys
+        }
+    })
+
+});
 
 // Works
 
@@ -131,7 +172,7 @@ router.get('/top', authentication.verifyOrdinaryUser, (req, res) => {
 
 /// This works!
 
-router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
+router.post('/addrecipe', authentication.verifyOrdinaryUser, upload.single('file'), (req, res) => {
 
     console.log('the route is running now!');
 
@@ -140,9 +181,6 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
 
     console.log('is decoded working....' + req.decoded.id);
-
-
-
 
 
     Recipe.create({
@@ -155,7 +193,9 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
         postedBy: req.decoded.id,
         postersCreationDate: req.decoded.creationDate,
         postersName: req.decoded.username,
-        isActive: req.decoded.isActive
+        isActive: req.decoded.isActive,
+        profilePic: String(req.file.location),
+        chefAvatar: req.decoded.profilePic
     }).then((recipe) => {
 
         console.log('Inserting into usersRecipes');
@@ -180,6 +220,9 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, (req, res) => {
 
 
 });
+
+
+
 
 
 /// Adding Review and if review already exists, edits it
@@ -302,7 +345,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                     recipeName: req.params.name,
                     postersName: req.decoded.username,
                     comment: String(req.body.comment),
-                    postedAt: new Date()
+                    postedAt: new Date(),
+                    profilePic: String(req.decoded.profilePic)
                 });
 
                 if (reviewScore > 3){
@@ -388,7 +432,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 postedBy: req.decoded.id,
                 chefsCreationDate: dataObj.chefsCreationDate,
                 chefsId: dataObj.chefsId,
-                reviewOf: dataObj.reviewOf
+                reviewOf: dataObj.reviewOf,
+                profilePic: String(req.decoded.profilePic)
 
             };
 
@@ -445,7 +490,8 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                                postedBy: req.decoded.id,
                                chefsCreationDate: dataObj.chefsCreationDate,
                                chefsId: dataObj.chefsId,
-                               reviewOf: dataObj.reviewOf
+                               reviewOf: dataObj.reviewOf,
+                               profilePic: String(req.decoded.profilePic)
 
                            };
 
@@ -573,6 +619,28 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
 
 
     });
+
+});
+
+/// Works
+
+router.post('/:category/:name/changeProfilePic', authentication.verifyOrdinaryUser, upload.single('file'), function(req, res, next){
+
+
+    Recipe.findOne({category: req.params.category, name: req.params.name}).then((recipe) => {
+
+        if (String(req.decoded.id) === recipe.postedBy){
+
+            recipe.set('profilePic', req.file.location);
+
+            recipe.save();
+
+            res.send('changed Profile Pic!')
+
+        }
+    })
+
+
 
 });
 

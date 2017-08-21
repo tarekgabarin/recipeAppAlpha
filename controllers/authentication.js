@@ -27,6 +27,7 @@ exports.verifyOrdinaryUser = function (req, res, next) {
                     console.log("within jwt.verify, decoded is..." + req.decoded.id);
                     console.log('req.decoded is now...' + req.decoded);
                     console.log('req.decoded.creationDate is...' + req.decoded.creationDate);
+                    console.log('req.decoded.profilePic is now...' + req.decoded.profilePic );
                     next();
                 }
         });

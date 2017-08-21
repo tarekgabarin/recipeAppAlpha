@@ -13,12 +13,119 @@ const jwt = require('jsonwebtoken');
 mongoose.Promise = Promise;
 const Recipe = require('../model/recipe');
 
+///!!!! NEW !!!!//
+
+const AWS = require('aws-sdk');
+
+const fs = require('fs');
+
+
+const multer = require('multer');
+
+const multerS3 = require('multer-s3');
+
+const accessKeyId =  process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_KEY;
+
+AWS.config.update({
+
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey,
+    region: "ca-central-1"
+
+});
+
+s3 = new AWS.S3();
+
+const upload = multer({
+
+    storage: multerS3({
+
+        s3: s3,
+
+        bucket: "deelishapp",
+
+        key: function (req, file, cb) {
+            console.log(file);
+            cb(null, Date.now().toString()); //use Date.now() for unique file keys
+        }
+    })
+
+});
+
+
+
+
+
+
+
+router.post('/uploadProfilePic', authentication.verifyOrdinaryUser, upload.single('file'), (req, res, next) => {
+
+
+    Recipe.where({postedBy: req.decoded.id, postersCreationDate: req.decoded.creationDate}).update({$set: {chefAvatar: req.file.location}}).then(() => {
+
+        console.log('chefAvatar Changed!')
+
+    });
+
+    User.findOne({_id: String(req.decoded.id), creationDate: req.decoded.creationDate}).then((user) => {
+
+        console.log(user);
+
+        console.log('the type of user.usersReviews is...', typeof(user.usersReviews));
+
+        console.log('user.usersReviews[0] is...', user.usersReviews[0]);
+
+        user.set('profilePic', String(req.file.location));
+
+        let value_ = generateUserToken(user);
+
+        res.header('x-auth', value_).send(value_);
+
+        user.save();
+
+        for (let i = 0; i < user.usersReviews.length; i++){
+
+            Recipe.findOne({_id: user.usersReviews[i].reviewOf, postersCreationDate: user.usersReviews[i].chefsCreationDate}).then((recipe) => {
+
+                console.log('in for loop of callback, recipe is... ' + recipe);
+
+                for (let l = 0; l < recipe.reviewsOfRecipe.length; l++){
+
+                    if(recipe.reviewsOfRecipe[l].postedBy === req.decoded.id){
+
+                        recipe.reviewsOfRecipe[l].profilePic = req.file.location;
+
+                        recipe.save();
+
+                        break;
+
+                    }
+
+                }
+
+
+            });
+
+
+        }
+
+    })
+
+
+
+    });
+
+// !!!!NEW !!!//
+
+
+
 // Keep the function, it's a vital part of the code
 
 function generateUserToken(user){
 
 
-    return jwt.sign({id: user._id, creationDate: user.creationDate, username: user.username}, config.secretKey);
+    return jwt.sign({id: user._id, creationDate: user.creationDate, username: user.username, profilePic: user.profilePic}, config.secretKey);
 
 
 

@@ -48,9 +48,6 @@ let User = new Schema({
         default: true
     },
 
-    profilePic: {
-        type: String,
-    },
 
     email: {
         type: String,
@@ -182,7 +179,14 @@ let User = new Schema({
             type: Number
         }
 
-    }]
+    }],
+
+    profilePic:{
+
+        type: String,
+        default: 'BLANK'
+
+    }
 });
 
 User.methods.passwordComparison = function(candidate, callback){

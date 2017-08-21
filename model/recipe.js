@@ -91,7 +91,18 @@ let recipeSchema = new Schema({
    postedAt: {
       type: String,
       default: new Date()
-   }
+   },
+
+    profilePic: {
+      type: String,
+      default: 'BLANK'
+
+    },
+
+    chefAvatar: {
+      type: String,
+      default: 'BLANK'
+    }
 
 });
 

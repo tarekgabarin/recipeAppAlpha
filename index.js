@@ -27,10 +27,26 @@ db.once('open', function () {
 });
 
 
+
+
+
 // Set up App
 app.use(morgan('combined'));
-app.use(bodyParser.json({type: '*/*'}));
+// app.use(bodyParser.json({type: '*/*'})); OLD !!!!
+
+// !! NEW !! //
+
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
+
+// !! NEW !! //
+
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+
 
 
 app.use('/users', userRouter);
