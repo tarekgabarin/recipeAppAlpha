@@ -222,6 +222,49 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, upload.single('file
 });
 
 
+// THis works :)
+
+
+router.post('/:category/:name/editRecipe', authentication.verifyOrdinaryUser, (req, res, next) => {
+
+    Recipe.findOne({name: req.params.name}).then((recipe) => {
+
+        console.log('running actual code');
+
+        console.log('recipe is...' +  recipe);
+
+        let steps = req.body.steps;
+
+        let name = req.body.name;
+
+        let ingredients = req.body.ingredients;
+
+        let category = req.body.category;
+
+       /// let profilePic = req.file.location;
+
+        if (recipe.postedBy === req.decoded.id){
+
+
+            recipe.steps = steps;
+
+            recipe.name = name;
+
+            recipe.ingredients = ingredients;
+
+            recipe.category = category;
+
+            recipe.save();
+
+            res.send(recipe);
+
+        }
+    });
+
+
+});
+
+
 
 
 

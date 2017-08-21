@@ -20,9 +20,6 @@ const reviewSchema = require('../model/review');
 
 let User = new Schema({
 
-    name: {
-        type: String
-    },
 
     // The passport plugin already inputs username and password into our Schema
 
@@ -186,7 +183,40 @@ let User = new Schema({
         type: String,
         default: 'BLANK'
 
+    },
+
+    firstName: {
+        type: String,
+        required: true,
+        defualt: ''
+    },
+
+    lastName: {
+        type: String,
+        required: true,
+        default: ''
+    },
+
+    aboutMe: {
+        type: String,
+        default: ''
+
+    },
+
+    city: {
+        type: String,
+        required: true,
+        default: ''
+
+    },
+
+    country: {
+        type: String,
+        required: true,
+        default: ''
     }
+
+
 });
 
 User.methods.passwordComparison = function(candidate, callback){

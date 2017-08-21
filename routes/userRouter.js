@@ -56,7 +56,7 @@ const upload = multer({
 
 
 
-
+// Finally works
 
 
 router.post('/uploadProfilePic', authentication.verifyOrdinaryUser, upload.single('file'), (req, res, next) => {
@@ -159,10 +159,12 @@ router.post('/register', (req, res, next) => {
                             User.create({
                                 username: req.body.username,
                                 password: hash,
-                                name: req.body.name,
+                                firstName: req.body.firstName,
+                                lastName: req.body.lastName,
+                                city: req.body.city,
+                                country: req.body.country,
                                 email: req.body.email,
                                 profilePic: req.body.profilePic,
-                                ///  userId: userid
                             }).then((user) => {
 
                                 let value_ = generateUserToken(user);
@@ -293,6 +295,47 @@ router.get('/myprofile', authentication.verifyOrdinaryUser, (req, res, next) => 
 
 });
 
+// works
+
+router.put('/editProfile', authentication.verifyOrdinaryUser, (req, res, next) => {
+
+    User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
+
+        if (String(user._id) === req.decoded.id){
+
+            let firstName = req.body.firstName;
+
+            let lastName = req.body.lastName;
+
+            let aboutMe = req.body.aboutMe;
+
+            let city = req.body.city;
+
+            let country = req.body.country;
+
+            user.firstName = firstName;
+
+            user.lastName = lastName;
+
+            user.city = city;
+
+            user.aboutMe = aboutMe;
+
+            user.country = country;
+
+            user.save();
+
+            res.send(user);
+
+
+        }
+
+
+    })
+
+
+});
+
 /// To view another users profile
 
 // works
@@ -366,9 +409,6 @@ router.get('/:username/recipes', (req, res, next) => {
         });
 
 });
-
-
-
 
 
 
