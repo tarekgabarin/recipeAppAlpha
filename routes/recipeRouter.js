@@ -79,6 +79,17 @@ router.get('/:page', (req, res) => {
 
 });
 
+
+// used to test it.
+
+router.get('/test', (req, res) => {
+
+    res.send('Does it work?')
+
+});
+
+
+
 /// Get the recipe by category
 
 // Works

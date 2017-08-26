@@ -535,6 +535,24 @@ router.post('/login', passport.authenticate('localLogin', {session: false}), (re
 
 });
 
+
+// NEW
+
+router.get('/logout', authentication.verifyOrdinaryUser, (req, res, next) => {
+
+    req.logOut();
+
+    req.session.destroy(function(err) {
+        if (err) throw err;
+
+
+    });
+
+    res.send('logged out');
+
+
+});
+
 // This works : )
 
 /// Subscirbes and unsubscribes to another user

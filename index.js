@@ -15,7 +15,11 @@ let userRouter = require('./routes/userRouter');
 const app = express();
 // set up DB
 
+// mongoose.connect(process.env.MONGODB_URI);
+
 mongoose.connect(config.mongoUrl);
+
+// mongoose.connect(config.mongoUrl, { useMongoClient: true });
 
 let db = mongoose.connection;
 
