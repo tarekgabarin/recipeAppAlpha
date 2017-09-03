@@ -12,6 +12,8 @@ let userRouter = require('./routes/userRouter');
 
 
 
+let cors = require('cors');
+
 const app = express();
 // set up DB
 
@@ -39,6 +41,29 @@ app.use(morgan('combined'));
 // app.use(bodyParser.json({type: '*/*'})); OLD !!!!
 
 // !! NEW !! //
+
+/*
+
+app.use(function(req, res, next){
+
+    const origin = req.get('origin');
+
+   res.header('Access-Control-Allow-Origin', "*");
+
+   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+
+  /// res.header('Access-Control-Allow-Methods', true);
+
+   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma, x-auth');
+
+
+});
+
+*/
+
+app.use(cors());
+
+app.options('*', cors());
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));

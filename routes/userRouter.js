@@ -13,6 +13,8 @@ const jwt = require('jsonwebtoken');
 mongoose.Promise = Promise;
 const Recipe = require('../model/recipe');
 
+const cors = require('cors');
+
 ///!!!! NEW !!!!//
 
 const AWS = require('aws-sdk');
@@ -53,7 +55,20 @@ const upload = multer({
 
 });
 
+/// NEW !!!!
 
+
+/*
+
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+*/
+
+//// NEW !!!!
 
 
 // Finally works
@@ -519,7 +534,7 @@ router.get('/:username', (req,res, next) => {
 
 // Works
 
-router.post('/login', passport.authenticate('localLogin', {session: false}), (req, res, err) => {
+router.post('/login', passport.authenticate('localLogin', cors(), {session: false}), (req, res, err) => {
 
     if (err) console.log(err);
 
