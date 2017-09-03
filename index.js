@@ -10,11 +10,9 @@ let bodyParser = require('body-parser');
 let recipeRouter = require('./routes/recipeRouter');
 let userRouter = require('./routes/userRouter');
 
-import {options} from 'express';
 
 
-
-let cors = require('cors');
+// let cors = require('cors');
 
 const app = express();
 // set up DB
@@ -63,9 +61,9 @@ app.use(function(req, res, next){
 
 */
 
-app.use(cors());
+/// app.use(cors());
 
-app.options('*', cors());
+/// app.options('*', cors());
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));

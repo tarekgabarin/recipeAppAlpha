@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken');
 mongoose.Promise = Promise;
 const Recipe = require('../model/recipe');
 
-const cors = require('cors');
+//// const cors = require('cors');
 
 ///!!!! NEW !!!!//
 
