@@ -534,7 +534,7 @@ router.get('/:username', (req,res, next) => {
 
 // Works
 
-router.post('/login', passport.authenticate('localLogin', cors(), {session: false}), (req, res, err) => {
+router.post('/login', passport.authenticate('localLogin',  {session: false}),  (req, res, err) => {
 
     if (err) console.log(err);
 
