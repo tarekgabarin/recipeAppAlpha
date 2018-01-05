@@ -265,7 +265,7 @@ router.put('/:category/:name/editRecipe', authentication.verifyOrdinaryUser, (re
 
             recipe.save();
 
-            res.send(recipe);
+            res.json(recipe);
 
         }
     });
