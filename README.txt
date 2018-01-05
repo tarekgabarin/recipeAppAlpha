@@ -148,33 +148,267 @@ https://deelish-backend.herokuapp.com/recipes/addrecipe
 
     //// The content-type for it is application/x-www-form-urlencoded
 
-    KEY          |        value
-----------------------------------
-                 |
-                 |
-----------------------------------
-                 |
-                 |
-----------------------------------
-                 |
-                 |
-----------------------------------
-                 |
-                 |
-----------------------------------
-                 |
-                 |
-----------------------------------
-                 |
-                 |
-----------------------------------
-                 |
-                 |
-----------------------------------
+    | Key         	| Value                                                      	|
+    |-------------	|------------------------------------------------------------	|
+    | name        	| Cereal                                                     	|
+    | ingredients 	| Milk                                                       	|
+    | ingredients 	| Cereal                                                     	|
+    | steps       	| First, pour cereal into a bowl. Then add milk and enjoy :) 	|
+    | category    	| breakfast                                                  	|
+    | file        	| picture-of-breakfast-cereal.jpeg                           	|
+
+
+**JWT REQUIRED**
+
+YES
+
+**RESPONSE**
+
+It will return the document of the recipe you just created. This is so that, in the front-end, the user will be
+taken to the page of their recipe once the it is created and added to the database.
 
 
 
+#######################################################################################################################
+
+
+//// RATING A RECIPE //////
+
+**INFO**
+
+This is the route wherein the user rates another users recipe. If the router fires again, but the user has already
+reviewed the recipe, then it merely updates their review instead of adding a new one.
+
+**TYPE**
+
+POST
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/recipes/[The category the recipe is in]/[the name of the recipe]
+
+**Example**
+
+https://deelish-backend.herokuapp.com/recipes/breakfast/cereal
+
+**REQUEST BODY**
+
+
+    //// The content-type for it is application/json
+
+
+{
+	"wouldMakeAgain": 5,
+	"howGoodTaste": 5,
+	"howEasyToMake": 5,
+	"comment": "Great!"
+}
+
+   // A score between 1 and 5 is given to each of these categries; the final score is based on calculating all three.
+   // The comment is basically the users written review.
+
+
+**JWT REQUIRED**
+
+YES
+
+**RESPONSE**
+
+It returns the recipe document that has all of the reviews embedded within it. This is so that the front end can update
+to show the review in the review section of the page. (This was my first MongoDB project, so I naively embedded reviews
+for the recipe within that recipes document. Nevertheless, It still works. I have avoided using embedded references
+ever since)
+
+########################################################################################################################
+
+///// LOGGING IN //////////
+
+
+**INFO**
+
+This route basically logs the user in.
+
+**TYPE**
+
+POST
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/users/login
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/users/login
+
+**REQUEST BODY**
+
+/// I should note that all the emails I am using, and encourage you to use, ought to be fake one. As long as you have
+// @ symbol it should work
+
+{
+	"email": "nadia@gmail.com",
+	"password": "secretPassWord"
+}
+
+**JWT REQUIRED**
+
+YES
+
+**RESPONSE**
+
+Same as the register route, it returns a JWT token for verification purposes.
+
+
+########################################################################################################################
+
+//////// GETTING ALL RECIPES /////////
+
+**INFO**
+
+This route brings back recipes of all categories. There is a URL variable within it. It is a number, and determines how
+many recipes to skip over and get when retrieving them. This is to limit the amount of recipes in the response object in
+order to improve performance. If you have have 100,000 recipes in your Mongo collection, having them all be within one
+response object would negatively impact performance.
+
+The URL variable is multiple by 10, and whatever it equals will be the amount of documents that are skipped over. I
+should note that the first number you can use as a URL variable is 0 to avoid unintentionally skipping over first 10.
+
+The routes, and the ones like it, are designed with pagination in mind. These calls will be made automatically as the
+user clicks on the next page number in the CSS pagination.
+
+**TYPE**
+
+GET
+
+**TEMPLATE**
+
+ https://deelish-backend.herokuapp.com/recipes/[amount of recipes to skip over]
+
+**EXAMPLE**
+
+ https://deelish-backend.herokuapp.com/recipes/1
+
+ //// Mongo will skip over the first 10 recipes, and give you 10 recipes that follow them. If you want to see the first
+ /// 10 in the collection, the URL variable should be 0. Regardless of what the URL variable is, it will always return
+ /// 10 documents
+
+ **REQUEST BODY**
+
+ N/A
+
+ **JWT REQUIRED**
+
+ YES
+
+**RESPONSE**
+
+Will always return 10 recipes. THe recipes themselves will vary depending on the URL variable.
 
 
 
+#######################################################################################################################
+
+
+///// GETTING RECIPES FROM A SPECIFIC CATEGORY /////
+
+**INFO**
+
+Self-explanatory. Follows the same rules and logic as the GET router above.
+
+**TYPE**
+
+GET
+
+**TEMPLATE**
+
+ https://deelish-backend.herokuapp.com/recipes/[category]/[url number variable]
+
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/recipes/breakfast/2
+
+/// This will get 10 recipe documents that follow the first 20
+
+
+#######################################################################################################################
+
+///// GET TOP RECIPES ///////
+
+
+**INFO**
+
+Getting the recipes with the highest rating. The higher your URL variable number is however, the lower the rating is.
+
+**TYPE**
+
+GET
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/recipes/top/[url variable number]
+
+**EXAMPLE**
+
+/// This will get you the highest rated recipes
+
+ https://deelish-backend.herokuapp.com/recipes/top/0
+
+ /// Whereas this will get you some bad pretty mediocre ones (assuming the database has more than 500 recipe documents
+ of course).
+
+ https://deelish-backend.herokuapp.com/recipes/top/500
+
+########################################################################################################################
+
+/// GET A SPECIFIC DOCUMENT /////
+
+**INFO**
+
+Basically the API call made when you click on a recipe when browsing, and want to see the page for it. It returns the
+recipe document (along with the reviews for it).
+
+**TYPE**
+
+GET
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/recipes/[category of the recipe]/[name of the recipe]
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/recipes/breakfast/cereal
+
+#######################################################################################################################
+
+///////////// SEE ALL THE RECIPES MADE BY A SPECIFIC USER /////////////////////////////
+
+**TYPE**
+
+GET
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/users/[name of user]/recipes
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/users/tarek/recipes
+
+#######################################################################################################################
+
+/////////// SEE ALL THE REVIEWS MADE BY A SPECIFIC USER /////////////////////////////////////
+
+**TYPE**
+
+GET
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/users/[name of user]/reviews
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/users/tarek/reviews
 
