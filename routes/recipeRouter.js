@@ -190,8 +190,6 @@ router.get('/top', authentication.verifyOrdinaryUser, (req, res) => {
 router.post('/addrecipe', authentication.verifyOrdinaryUser, upload.single('file'), (req, res) => {
 
 
-
-
     Recipe.create({
 
         name: req.body.name,
@@ -213,13 +211,11 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, upload.single('file
         User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
 
-
             user.usersRecipes.push({
                 recipeId: recipe._id,
                 creationDate: req.decoded.creationDate,
                 category: req.body.category
             });
-
 
 
             user.save();
@@ -236,11 +232,9 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, upload.single('file
 // THis works :)
 
 
-router.put('/:category/:name/editRecipe', authentication.verifyOrdinaryUser, (req, res, next) => {
+router.post('/:category/:name/editRecipe', authentication.verifyOrdinaryUser, (req, res, next) => {
 
     Recipe.findOne({name: req.params.name}).then((recipe) => {
-
-
 
         let steps = req.body.steps;
 
@@ -268,7 +262,13 @@ router.put('/:category/:name/editRecipe', authentication.verifyOrdinaryUser, (re
             res.json(recipe);
 
         }
-    });
+    })
+
+        .catch(err => {
+
+            if (err) console.log(err)
+
+        });
 
 
 });
@@ -281,7 +281,6 @@ router.put('/:category/:name/editRecipe', authentication.verifyOrdinaryUser, (re
 router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req, res, next) {
 
     let reviewScore = (Number(req.body.howGoodTaste) + Number(req.body.wouldMakeAgain) + Number(req.body.howEasyToMake)) / 3;
-
 
 
     let votingRecord = {
@@ -314,7 +313,6 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
         return new Promise((resolve, reject) => {
 
 
-
             reviewController.checkThenGetRecipe(dataObj, votingRecord, req.params.name, req.params.category, req.decoded.id).then((recipe) => {
 
                 if (recipe !== undefined && recipe !== null) {
@@ -344,7 +342,6 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
     gotReviewDataPromise().then((recipe) => {
 
 
-
         if (votingRecord.alreadyVoted === false && dataObj.newEntry === true) {
 
 
@@ -354,8 +351,6 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
             }, {$inc: {numberOfRatings: 1, totalAddedRatings: reviewScore}}).then(() => {
 
                 console.log('Inserting review into recipe document');
-
-
 
 
                 recipe.reviewsOfRecipe.push({
@@ -457,8 +452,6 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
         else if (votingRecord.alreadyVoted === true && dataObj.newEntry === false) {
 
 
-
-
             recipe.reviewsOfRecipe[dataObj.reviewIndex] = {
                 wouldMakeAgain: req.body.wouldMakeAgain,
                 howGoodTaste: req.body.howGoodTaste,
@@ -480,7 +473,6 @@ router.post('/:category/:name', authentication.verifyOrdinaryUser, function (req
                 dataObj.newScore = Math.abs(Number(recipe.totalAddedRatings) - reviewScore);
 
                 dataObj.newScore = -dataObj.newScore;
-
 
 
             }

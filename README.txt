@@ -502,6 +502,6 @@ https://deelish-backend.herokuapp.com/recipes/breakfast/cereal/editRecipe
 
 **REQUEST BODY**
 
-/// In the front end, the user won't have to refill all these fields. But in POSTMAN you should refill all the fields
+/// In the front end, the user won't have to refill all these fields. But in POSTMAN you should refill all the fields.
 
 
