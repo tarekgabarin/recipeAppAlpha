@@ -479,18 +479,18 @@ https://deelish-backend.herokuapp.com/users/598ca0788f96ab08ec0fb3e2/unsubscribe
  YES
 
 
+
 #########################################################################################################################
 
 //////////// EDIT A RECIPE YOU MADE ///////////////////////////////////////////////////////////////////////////////////
 
 **INFO**
 
-Let's you edit your recipe you made. When using POSTMAN, You have to fill out all the fields required even if you don't
-intend to edit it. Luckily in the front end, all that will be taken care of so the user won't have to refill everything.
+Let's you edit your recipe you made.
 
 **TYPE**
 
-POST
+PUT
 
 **TEMPLATE**
 
@@ -502,6 +502,108 @@ https://deelish-backend.herokuapp.com/recipes/breakfast/cereal/editRecipe
 
 **REQUEST BODY**
 
-/// In the front end, the user won't have to refill all these fields. But in POSTMAN you should refill all the fields.
+/// If you just want to change the name of your recipe
+
+{
+	"name": "Frosted Flakes"
+}
+
+// Or let's say you just want to change the ingredients
+
+{
+
+    "ingredients": ["cereal", "orange juice"]
+
+}
+
+ **JWT REQUIRED**
+
+ YES
+
+**RESPONSE**
+
+Returns the updated recipe document.
+
+#########################################################################################################################
+
+//////////// EDIT YOUR PERSONAL INFO /////////////////////////////////////////////////////////////////////////////////
+
+**TYPE**
+
+PUT
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/users/editProfile
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/users/editProfile
+
+**REQUEST BODY**
+
+/// If you just want to change your name
+
+{
+	"firstname": "Miles"
+
+	"lastName": "Prower"
+}
+
+ **JWT REQUIRED**
+
+ YES
+
+**RESPONSE**
+
+Returns the updated recipe document.
+
+#######################################################################################################################
+
+ //////// DEACTIVATE ACCOUNT //////////////////////////////////////////////////////////////////////////////////////////
+
+**INFO**
+
+When you deactivate your account, all your reviews, recipes, and your user document are still in the mongodb database.
+However, your profile and all your recipes/reviews will be hidden until you reactivate it.
+
+**TYPE**
+
+POST
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/manage-account/deactivate
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/manage-account/deactivate
+
+ **JWT REQUIRED**
+
+ YES
 
 
+#######################################################################################################################
+
+///////// DELETE A RECIPE YOU MADE ////////////////////////////////////////////////////////////////////////////////////
+
+**INFO**
+
+Deletes a recipe you made.
+
+**TYPE**
+
+DELETE
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/recipes/[category your recipe is in]/[name of your recipe]
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/recipes/sweets/cupcakes
+
+ **JWT REQUIRED**
+
+ YES
