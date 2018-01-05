@@ -236,7 +236,7 @@ router.post('/addrecipe', authentication.verifyOrdinaryUser, upload.single('file
 // THis works :)
 
 
-router.post('/:category/:name/editRecipe', authentication.verifyOrdinaryUser, (req, res, next) => {
+router.put('/:category/:name/editRecipe', authentication.verifyOrdinaryUser, (req, res, next) => {
 
     Recipe.findOne({name: req.params.name}).then((recipe) => {
 

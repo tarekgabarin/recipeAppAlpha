@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="05ce16e8-8225-4a35-bd59-afadb3dab27a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.txt" afterPath="$PROJECT_DIR$/README.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/recipeRouter.js" afterPath="$PROJECT_DIR$/routes/recipeRouter.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,11 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="recipeRouter.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="recipeRouter.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="102" column="30" lean-forward="true" selection-start-line="102" selection-start-column="30" selection-end-line="102" selection-end-column="30" />
+            <state relative-caret-position="95">
+              <caret line="233" column="0" lean-forward="true" selection-start-line="233" selection-start-column="0" selection-end-line="233" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -70,11 +71,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="758">
-              <caret line="414" column="0" lean-forward="true" selection-start-line="414" selection-start-column="0" selection-end-line="414" selection-end-column="0" />
+            <state relative-caret-position="720">
+              <caret line="504" column="117" lean-forward="false" selection-start-line="504" selection-start-column="117" selection-end-line="504" selection-end-column="117" />
               <folding />
             </state>
           </provider>
@@ -188,11 +189,11 @@
         <option value="$PROJECT_DIR$/model/user.js" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/services/passport.js" />
-        <option value="$PROJECT_DIR$/routes/recipeRouter.js" />
         <option value="$PROJECT_DIR$/config/config.js" />
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/routes/userRouter.js" />
         <option value="$PROJECT_DIR$/README.txt" />
+        <option value="$PROJECT_DIR$/routes/recipeRouter.js" />
       </list>
     </option>
   </component>
@@ -567,12 +568,12 @@
       <workItem from="1504549484898" duration="26000" />
       <workItem from="1508463737132" duration="322000" />
       <workItem from="1512588818591" duration="202000" />
-      <workItem from="1515170766145" duration="14831000" />
+      <workItem from="1515170766145" duration="16950000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="507480000" />
+    <option name="totallyTimeSpent" value="509599000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -798,6 +799,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="504" column="117" lean-forward="false" selection-start-line="504" selection-start-column="117" selection-end-line="504" selection-end-column="117" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/userRouter.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-38">
@@ -808,16 +817,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/recipeRouter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="102" column="30" lean-forward="true" selection-start-line="102" selection-start-column="30" selection-end-line="102" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="758">
-          <caret line="414" column="0" lean-forward="true" selection-start-line="414" selection-start-column="0" selection-end-line="414" selection-end-column="0" />
+        <state relative-caret-position="95">
+          <caret line="233" column="0" lean-forward="true" selection-start-line="233" selection-start-column="0" selection-end-line="233" selection-end-column="0" />
           <folding />
         </state>
       </provider>

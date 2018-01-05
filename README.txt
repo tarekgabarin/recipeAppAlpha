@@ -298,7 +298,7 @@ GET
 
  **JWT REQUIRED**
 
- YES
+ NO
 
 **RESPONSE**
 
@@ -324,12 +324,17 @@ GET
  https://deelish-backend.herokuapp.com/recipes/[category]/[url number variable]
 
 
+
 **EXAMPLE**
 
 https://deelish-backend.herokuapp.com/recipes/breakfast/2
 
 /// This will get 10 recipe documents that follow the first 20
 
+
+ **JWT REQUIRED**
+
+ NO
 
 #######################################################################################################################
 
@@ -359,9 +364,13 @@ https://deelish-backend.herokuapp.com/recipes/top/[url variable number]
 
  https://deelish-backend.herokuapp.com/recipes/top/500
 
+  **JWT REQUIRED**
+
+  NO
+
 ########################################################################################################################
 
-/// GET A SPECIFIC DOCUMENT /////
+/// GET DETAILS (ALONG WITH REVIEWS) OF A SPECIFIC RECIPE /////
 
 **INFO**
 
@@ -379,6 +388,10 @@ https://deelish-backend.herokuapp.com/recipes/[category of the recipe]/[name of 
 **EXAMPLE**
 
 https://deelish-backend.herokuapp.com/recipes/breakfast/cereal
+
+ **JWT REQUIRED**
+
+ NO
 
 #######################################################################################################################
 
@@ -411,4 +424,84 @@ https://deelish-backend.herokuapp.com/users/[name of user]/reviews
 **EXAMPLE**
 
 https://deelish-backend.herokuapp.com/users/tarek/reviews
+
+ **JWT REQUIRED**
+
+ NO
+
+#######################################################################################################################
+
+///////// SUBSCRIBE TO ANOTHER USERS COOKING ////////////////////////////////////////////////////////////////////////
+
+**INFO**
+
+It basically let's the user subscribe to another user, so that the former can get the latest dishes made by the latter
+easily.
+
+**TYPE**
+
+PUT
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/users/[_id of that users you want to subscribe to]/subscribe
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/users/598ca0788f96ab08ec0fb3e2/subscribe
+
+ **JWT REQUIRED**
+
+ YES
+
+#######################################################################################################################
+
+///////////// UNSUBSCRIBE TO ANOTHER USERS COOKING ////////////////////////////////////////////////////////////////////
+
+**INFO**
+
+Same as above except you unsubscribe.
+
+**TYPE**
+
+PUT
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/users/[_id of that users you want to subscribe to]/unsubscribe
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/users/598ca0788f96ab08ec0fb3e2/unsubscribe
+
+ **JWT REQUIRED**
+
+ YES
+
+
+#########################################################################################################################
+
+//////////// EDIT A RECIPE YOU MADE ///////////////////////////////////////////////////////////////////////////////////
+
+**INFO**
+
+Let's you edit your recipe you made. When using POSTMAN, You have to fill out all the fields required even if you don't
+intend to edit it. Luckily in the front end, all that will be taken care of so the user won't have to refill everything.
+
+**TYPE**
+
+POST
+
+**TEMPLATE**
+
+https://deelish-backend.herokuapp.com/recipes/[category the user's recipe is in]/[name of the recipe/editRecipe
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/recipes/breakfast/cereal/editRecipe
+
+**REQUEST BODY**
+
+/// In the front end, the user won't have to refill all these fields. But in POSTMAN you should refill all the fields
+
 
