@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const authentication = require('../controllers/authentication');
 const express = require('express');
 const passport = require('passport');
-const passportService =require('../services/passport');
+const passportService = require('../services/passport');
 const config = require('../config/config');
 const User = require('../model/user');
 const router = express.Router();
@@ -26,7 +26,7 @@ const multer = require('multer');
 
 const multerS3 = require('multer-s3');
 
-const accessKeyId =  process.env.AWS_ACCESS_KEY;
+const accessKeyId = process.env.AWS_ACCESS_KEY;
 const secretAccessKey = process.env.AWS_SECRET_KEY;
 
 AWS.config.update({
@@ -60,13 +60,13 @@ const upload = multer({
 
 /*
 
-router.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+ router.use(function(req, res, next) {
+ res.header("Access-Control-Allow-Origin", "*");
+ res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+ next();
+ });
 
-*/
+ */
 
 //// NEW !!!!
 
@@ -77,7 +77,10 @@ router.use(function(req, res, next) {
 router.post('/uploadProfilePic', authentication.verifyOrdinaryUser, upload.single('file'), (req, res, next) => {
 
 
-    Recipe.where({postedBy: req.decoded.id, postersCreationDate: req.decoded.creationDate}).update({$set: {chefAvatar: req.file.location}}).then(() => {
+    Recipe.where({
+        postedBy: req.decoded.id,
+        postersCreationDate: req.decoded.creationDate
+    }).update({$set: {chefAvatar: req.file.location}}).then(() => {
 
         console.log('chefAvatar Changed!')
 
@@ -85,11 +88,6 @@ router.post('/uploadProfilePic', authentication.verifyOrdinaryUser, upload.singl
 
     User.findOne({_id: String(req.decoded.id), creationDate: req.decoded.creationDate}).then((user) => {
 
-        console.log(user);
-
-        console.log('the type of user.usersReviews is...', typeof(user.usersReviews));
-
-        console.log('user.usersReviews[0] is...', user.usersReviews[0]);
 
         user.set('profilePic', String(req.file.location));
 
@@ -99,15 +97,17 @@ router.post('/uploadProfilePic', authentication.verifyOrdinaryUser, upload.singl
 
         user.save();
 
-        for (let i = 0; i < user.usersReviews.length; i++){
+        for (let i = 0; i < user.usersReviews.length; i++) {
 
-            Recipe.findOne({_id: user.usersReviews[i].reviewOf, postersCreationDate: user.usersReviews[i].chefsCreationDate}).then((recipe) => {
+            Recipe.findOne({
+                _id: user.usersReviews[i].reviewOf,
+                postersCreationDate: user.usersReviews[i].chefsCreationDate
+            }).then((recipe) => {
 
-                console.log('in for loop of callback, recipe is... ' + recipe);
 
-                for (let l = 0; l < recipe.reviewsOfRecipe.length; l++){
+                for (let l = 0; l < recipe.reviewsOfRecipe.length; l++) {
 
-                    if(recipe.reviewsOfRecipe[l].postedBy === req.decoded.id){
+                    if (recipe.reviewsOfRecipe[l].postedBy === req.decoded.id) {
 
                         recipe.reviewsOfRecipe[l].profilePic = req.file.location;
 
@@ -128,20 +128,22 @@ router.post('/uploadProfilePic', authentication.verifyOrdinaryUser, upload.singl
     })
 
 
-
-    });
+});
 
 // !!!!NEW !!!//
 
 
-
 // Keep the function, it's a vital part of the code
 
-function generateUserToken(user){
+function generateUserToken(user) {
 
 
-    return jwt.sign({id: user._id, creationDate: user.creationDate, username: user.username, profilePic: user.profilePic}, config.secretKey);
-
+    return jwt.sign({
+        id: user._id,
+        creationDate: user.creationDate,
+        username: user.username,
+        profilePic: user.profilePic
+    }, config.secretKey);
 
 
 }
@@ -154,134 +156,128 @@ function generateUserToken(user){
 router.post('/register', (req, res, next) => {
 
 
-
-        if (!req.body.email || !req.body.password) {
-            return res.status(442).send({error: 'Make sure that you entered your email and password'});
-        }
-
-
-        User.findOne({email: req.body.email})
-
-            .then((user) => {
-
-                if (!user) {
-
-                    let password = req.body.password;
-
-                    bcrypt.genSalt(10, function (err, salt) {
-                        bcrypt.hash(password, salt, function (err, hash) {
-                            if (err) throw err;
-                            User.create({
-                                username: req.body.username,
-                                password: hash,
-                                firstName: req.body.firstName,
-                                lastName: req.body.lastName,
-                                city: req.body.city,
-                                country: req.body.country,
-                                email: req.body.email,
-                                profilePic: req.body.profilePic,
-                            }).then((user) => {
-
-                                let value_ = generateUserToken(user);
+    if (!req.body.email || !req.body.password) {
+        return res.status(442).send({error: 'Make sure that you entered your email and password'});
+    }
 
 
-                                res.header('x-auth', value_).send(value_);
+    User.findOne({email: req.body.email})
+
+        .then((user) => {
+
+            if (!user) {
+
+                let password = req.body.password;
+
+                bcrypt.genSalt(10, function (err, salt) {
+                    bcrypt.hash(password, salt, function (err, hash) {
+                        if (err) throw err;
+                        User.create({
+                            username: req.body.username,
+                            password: hash,
+                            firstName: req.body.firstName,
+                            lastName: req.body.lastName,
+                            city: req.body.city,
+                            country: req.body.country,
+                            email: req.body.email,
+                            profilePic: req.body.profilePic,
+                        }).then((user) => {
+
+                            let value_ = generateUserToken(user);
 
 
-                            });
+                            res.header('x-auth', value_).send(value_);
+
+
                         });
                     });
-                }
+                });
+            }
 
-                else if (user){
+            else if (user) {
 
-                    if (user.isActive === false){
+                if (user.isActive === false) {
 
-                        let data = {
-                            usersReviewedRecipes: undefined,
-                            usersCreatedRecipes: undefined
-                        };
+                    let data = {
+                        usersReviewedRecipes: undefined,
+                        usersCreatedRecipes: undefined
+                    };
 
-                        user.set('isActive', true);
+                    user.set('isActive', true);
 
-                        data.usersCreatedRecipes = user.usersRecipes;
+                    data.usersCreatedRecipes = user.usersRecipes;
 
-                        data.usersReviewedRecipes = user.usersReviews;
+                    data.usersReviewedRecipes = user.usersReviews;
 
-                        user.save();
+                    user.save();
 
-                        let getDataPromise = () => {
+                    let getDataPromise = () => {
 
-                            return new Promise((resolve, reject) => {
+                        return new Promise((resolve, reject) => {
 
-                                if (data.usersCreatedRecipes !== undefined && data.usersReviewedRecipes !== undefined){
-                                    resolve();
-                                }
-                                else {
-                                    reject('data stuff is still null');
-                                }
+                            if (data.usersCreatedRecipes !== undefined && data.usersReviewedRecipes !== undefined) {
+                                resolve();
+                            }
+                            else {
+                                reject('data stuff is still null');
+                            }
+
+                        })
+
+                    };
+
+                    getDataPromise().then(() => {
+
+
+                        console.log('Running getUserPromise.then callback');
+
+                        for (let i = 0; i < data.usersCreatedRecipes.length; i++) {
+
+                            Recipe.findByIdAndUpdate(data.usersCreatedRecipes[i].recipeId, {$set: {isActive: true}}).then(() => {
+
+                                console.log('Recipe documents are active again');
 
                             })
 
-                        };
+                        }
 
-                        getDataPromise().then(() => {
+                        for (let i = 0; i < data.usersReviewedRecipes.length; i++) {
 
-                            console.log('running getDataPromise.then callback');
+                            Recipe.findByIdAndUpdate(data.usersReviewedRecipes[i].reviewOf).then((recipe) => {
 
+                                for (let l = 0; l < recipe.reviewsOfRecipe.length; l++) {
 
-                            console.log('Running getUserPromise.then callback');
-
-                            for (let i = 0; i < data.usersCreatedRecipes.length; i++){
-
-                                Recipe.findByIdAndUpdate(data.usersCreatedRecipes[i].recipeId, {$set: {isActive: true}}).then(() => {
-
-                                    console.log('Recipe documents are active again');
-
-                                })
-
-                            }
-
-                            for (let i = 0; i < data.usersReviewedRecipes.length; i++){
-
-                                Recipe.findByIdAndUpdate(data.usersReviewedRecipes[i].reviewOf).then((recipe) => {
-
-                                    for (let l = 0; l < recipe.reviewsOfRecipe.length; l++){
-
-                                        if (recipe.reviewsOfRecipe[l].postersName === req.body.username){
-                                            recipe.reviewsOfRecipe[l].isActive = true;
-                                            recipe.save();
-                                            break;
-                                        }
+                                    if (recipe.reviewsOfRecipe[l].postersName === req.body.username) {
+                                        recipe.reviewsOfRecipe[l].isActive = true;
+                                        recipe.save();
+                                        break;
                                     }
+                                }
 
-                                });
-                            }
+                            });
+                        }
 
 
+                    });
 
-
-                        });
-
-                        res.send('Account reactivated!');
-
-                    }
-
+                    res.send('Account reactivated!');
 
                 }
 
 
-                else {
+            }
 
-                    return res.status(422).send({error: "Email is already in use"});
-                }
 
-            })
+            else {
 
-            .catch((err) => {
-                console.log(err);
-            });
+                return res.status(422).send({error: "Email is already in use"});
+            }
 
+        })
+
+        .catch((err) => {
+            console.log(err);
+        });
 
 
 });
@@ -296,11 +292,11 @@ router.get('/myprofile', authentication.verifyOrdinaryUser, (req, res, next) => 
 
         .then((user) => {
 
-        if (user !== null && user !== undefined){
+            if (user !== null && user !== undefined) {
 
-            res.send(user)
+                res.send(user)
 
-        }
+            }
 
         })
 
@@ -316,7 +312,7 @@ router.put('/editProfile', authentication.verifyOrdinaryUser, (req, res, next) =
 
     User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
-        if (String(user._id) === req.decoded.id){
+        if (String(user._id) === req.decoded.id) {
 
             let firstName = req.body.firstName;
 
@@ -359,16 +355,16 @@ router.get('/:username', (req, res, next) => {
 
     /// get data for viewing other users' profile
 
-   User.findOne({username: req.params.username, isActive: true})
+    User.findOne({username: req.params.username, isActive: true})
 
-       .then((user) => {
-           res.send(user)
-       })
+        .then((user) => {
+            res.send(user)
+        })
 
-       .catch((err) => {
+        .catch((err) => {
 
             console.log(err);
-       });
+        });
 
 });
 
@@ -407,9 +403,6 @@ router.get('/:username/recipes', (req, res, next) => {
 
         .then((user) => {
 
-            console.log('user._id is...' + user._id);
-
-            console.log('user.creationDate is...' + user.creationDate);
 
             recipeModel = mongoose.model('Recipe');
 
@@ -426,7 +419,6 @@ router.get('/:username/recipes', (req, res, next) => {
 });
 
 
-
 // Works : )
 
 router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (req, res, next) => {
@@ -436,9 +428,6 @@ router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (re
         usersCreatedRecipes: undefined
     };
 
-    console.log('req,decoded.id...' + req.decoded.id);
-
-
 
     let getUserPromise = () => {
 
@@ -446,7 +435,6 @@ router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (re
 
             User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
-                console.log('user is....' + user);
 
                 user.set('isActive', false);
 
@@ -456,18 +444,16 @@ router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (re
 
                 user.save();
 
-                if (data.usersReviewedRecipes !== undefined && data.usersCreatedRecipes !== undefined){
+                if (data.usersReviewedRecipes !== undefined && data.usersCreatedRecipes !== undefined) {
 
                     resolve()
                 }
                 else {
-                    console.log('data.usersReviewedRecipes is...' + data.usersReviewedRecipes);
-                    console.log('data.usersCreatedRecipes is...' + data.usersCreatedRecipes);
+
                     reject('data stuff is undefined');
                 }
 
             });
-
 
 
         });
@@ -476,25 +462,23 @@ router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (re
 
     getUserPromise().then(() => {
 
-        console.log('Running getUserPromise.then callback');
+        for (let i = 0; i < data.usersCreatedRecipes.length; i++) {
 
-        for (let i = 0; i < data.usersCreatedRecipes.length; i++){
+            Recipe.findByIdAndUpdate(data.usersCreatedRecipes[i].recipeId, {$set: {isActive: false}}).then(() => {
 
-          Recipe.findByIdAndUpdate(data.usersCreatedRecipes[i].recipeId, {$set: {isActive: false}}).then(() => {
+                console.log('Recipe documents are not active anymore');
 
-              console.log('Recipe documents are not active anymore');
-
-          })
+            })
 
         }
 
-        for (let i = 0; i < data.usersReviewedRecipes.length; i++){
+        for (let i = 0; i < data.usersReviewedRecipes.length; i++) {
 
             Recipe.findByIdAndUpdate(data.usersReviewedRecipes[i].reviewOf).then((recipe) => {
 
-                for (let l = 0; l < recipe.reviewsOfRecipe.length; l++){
+                for (let l = 0; l < recipe.reviewsOfRecipe.length; l++) {
 
-                    if (recipe.reviewsOfRecipe[l].postedBy === req.decoded.id){
+                    if (recipe.reviewsOfRecipe[l].postedBy === req.decoded.id) {
                         recipe.reviewsOfRecipe[l].isActive = false;
                         recipe.save();
                         break;
@@ -507,17 +491,14 @@ router.post('/manage-account/deactivate', authentication.verifyOrdinaryUser, (re
         res.send('Account deactivated');
 
 
-
-
     });
-
 
 
 });
 
 // Works
 
-router.get('/:username', (req,res, next) => {
+router.get('/:username', (req, res, next) => {
 
 
     User.findOne({_id: req.params.username, isActive: true})
@@ -534,19 +515,13 @@ router.get('/:username', (req,res, next) => {
 
 // Works
 
-router.post('/login', passport.authenticate('localLogin',  {session: false}),  (req, res, err) => {
+router.post('/login', passport.authenticate('localLogin', {session: false}), (req, res, err) => {
 
     if (err) console.log(err);
 
     let value_ = generateUserToken(req.user);
 
-    console.log("value_.... is" + value_);
-
     res.header('x-auth', value_).send(value_);
-
-    console.log(req.user);
-
-
 
 });
 
@@ -557,7 +532,7 @@ router.get('/logout', authentication.verifyOrdinaryUser, (req, res, next) => {
 
     req.logOut();
 
-    req.session.destroy(function(err) {
+    req.session.destroy(function (err) {
         if (err) throw err;
 
 
@@ -584,7 +559,7 @@ router.put('/:userid/subscribe', authentication.verifyOrdinaryUser, (req, res, e
 
             User.findOne({_id: req.decoded.id, isActive: true, creationDate: req.decoded.creationDate}).then((user) => {
 
-                if (user.subscribedTo.length === 0){
+                if (user.subscribedTo.length === 0) {
 
                     alreadySubbed = false;
                     resolve(user);
@@ -593,15 +568,13 @@ router.put('/:userid/subscribe', authentication.verifyOrdinaryUser, (req, res, e
                 else {
 
 
-                    for (let i = 0; i < user.subscribedTo.length; i++){
-
-                        console.log('In for loop, user.subscribedTo[i].userid is....' + user.subscribedTo[i].userid);
+                    for (let i = 0; i < user.subscribedTo.length; i++) {
 
 
-                        if (user.subscribedTo[i].userid === req.params.userid){
+                        if (user.subscribedTo[i].userid === req.params.userid) {
                             alreadySubbed = true;
                             creationNum = user.subscribedTo[i].creationDate;
-                            console.log('user.subscribedTo[i].creationDate is...' + String(user.subscribedTo[i].creationDate));
+
                             res.send('Already subscribed to user');
                             resolve(user);
                             break;
@@ -618,7 +591,6 @@ router.put('/:userid/subscribe', authentication.verifyOrdinaryUser, (req, res, e
                 }
 
 
-
             })
 
         })
@@ -628,48 +600,47 @@ router.put('/:userid/subscribe', authentication.verifyOrdinaryUser, (req, res, e
 
     getUserPromise().then((user) => {
 
-      console.log('In callback, user is...' + user);
+        if (alreadySubbed === false) {
 
-      console.log('In callback, user.subscribedTo is...' + user.subscribedTo);
-
-      if (alreadySubbed === false){
-
-          User.findOne({_id: req.params.userid}).then((other) => {
+            User.findOne({_id: req.params.userid}).then((other) => {
 
 
+                user.subscribedTo.push({userid: String(other._id), creationDate: other.creationDate});
 
-              user.subscribedTo.push({userid: String(other._id), creationDate: other.creationDate});
+                other.followedBy.push({userid: String(user._id), creationDate: user.creationDate});
 
-              other.followedBy.push({userid: String(user._id), creationDate: user.creationDate});
+                user.save();
 
-              user.save();
+                other.save();
 
-              other.save();
+                res.send('Subscirbed to user');
 
-              res.send('Subscirbed to user');
+            })
 
-          })
+        }
+        else if (alreadySubbed === true) {
 
-      }
-      else if (alreadySubbed === true){
 
-          console.log('In callback, creationNum is...' + creationNum);
+            User.findOneAndUpdate({
+                _id: user._id,
+                creationDate: user.creationDate
+            }, {$pull: {subscribedTo: {userid: req.params.userid, creationDate: creationNum}}}).then(() => {
 
-          User.findOneAndUpdate({_id: user._id, creationDate: user.creationDate}, {$pull: {subscribedTo: {userid: req.params.userid, creationDate: creationNum}}}).then(() => {
+                console.log('removed other from your subscribedTo Array');
+            });
 
-              console.log('removed other from your subscribedTo Array');
-          });
 
-          console.log('creationNum is....' + creationNum);
+            User.findOneAndUpdate({
+                _id: req.params.userid,
+                creationDate: creationNum
+            }, {$pull: {followedBy: {userid: user._id, creationDate: user.creationDate}}}).then(() => {
 
-          User.findOneAndUpdate({_id: req.params.userid, creationDate: creationNum}, {$pull: {followedBy: {userid: user._id, creationDate: user.creationDate}}}).then(() => {
+                console.log('You were removed from the users followedBy Array');
+            });
 
-              console.log('You were removed from the users followedBy Array');
-          });
+            res.send('done');
 
-          res.send('done');
-
-      }
+        }
 
     })
 
@@ -693,14 +664,14 @@ router.post('/recommended', authentication.verifyOrdinaryUser, (req, res) => {
             User.findOne({_id: req.decoded.id, creationDate: req.decoded.creationDate}).then((user) => {
 
 
-                for (let i = 0; i < user.subscribedTo.length; i++){
+                for (let i = 0; i < user.subscribedTo.length; i++) {
 
                     usersSubs.subIds.push(user.subscribedTo[i].userid);
 
                 }
 
-                if (usersSubs.subIds.length !== 0){
-                    console.log('usersSubs.subIds is...' + usersSubs.subIds);
+                if (usersSubs.subIds.length !== 0) {
+
                     resolve()
 
                 }

@@ -10,9 +10,9 @@ const uuidV4 = require('uuid/v4');
 let Schema = mongoose.Schema;
 const favouriteSchema = require('./favourite');
 const jwt = require('jsonwebtoken');
-/// const {SHA256} = require('crypto-js');
+
 const _ = require('lodash');
-/// remember to install crypto-js
+
 const reviewSchema = require('../model/review');
 
 

@@ -2,6 +2,6 @@
 /// add this to .gitignore
 
 module.exports = {
-    'secretKey': '54323-19234-96844-23453',
+    'secretKey': process.env.SECRET_CODE,
     'mongoUrl' : process.env.MONGODB_URI
 };
