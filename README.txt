@@ -246,16 +246,12 @@ Same as the register route, it returns a JWT token for verification purposes.
 
 **INFO**
 
-This route brings back recipes of all categories. There is a URL variable within it. It is a number, and determines how
-many recipes to skip over and get when retrieving them. This is to limit the amount of recipes in the response object in
-order to improve performance. If you have have 100,000 recipes in your Mongo collection, having them all be within one
-response object would negatively impact performance.
+This route brings back recipes of all categories. There is a URL variable within it. It is a number, and determines how many recipes to skip over when retrieving recipes from the database. This is to limit the amount of recipes in the response object in
+order to improve performance. If you have have 100,000 recipes in your Mongo collection, having them all be within one response object would negatively impact performance.
 
-The URL variable is multiple by 10, and whatever it equals will be the amount of documents that are skipped over. I
-should note that the first number you can use as a URL variable is 0 to avoid unintentionally skipping over first 10.
+The URL variable is multiple by 10, and whatever it equals will be the amount of documents that are skipped over. I should note that the first number you can use as a URL variable is 0 to avoid unintentionally skipping over first 10.
 
-The routes, and the ones like it, are designed with pagination in mind. These calls will be made automatically as the
-user clicks on the next page number in the CSS pagination.
+The routes, and the ones like it, are designed with pagination in mind. These calls will be made automatically as the user clicks on the next page number in the CSS pagination.
 
 **TYPE**
 
@@ -588,3 +584,28 @@ https://deelish-backend.herokuapp.com/recipes/sweets/cupcakes
  **JWT REQUIRED**
 
  YES
+
+
+ #######################################################################################################################
+
+ ////////////////// SEE RECIPES MADE BY USERS YOU ARE SUBSCRIBED TO /////////////////////////////////////////////////////
+
+ **TYPE**
+
+ GET
+
+ **TEMPLATE**
+
+https://deelish-backend.herokuapp.com/users/recommended
+
+**EXAMPLE**
+
+https://deelish-backend.herokuapp.com/users/recommended
+
+ **JWT REQUIRED**
+
+ YES
+
+ **RESPONSE OBJECT**
+
+ User gets recipes from people he is subscribed to. 
